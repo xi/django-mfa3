@@ -1,0 +1,5 @@
+<p>Are you sure you want to delete the key {{ object.name }}?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button>Confirm</button>
+</form>

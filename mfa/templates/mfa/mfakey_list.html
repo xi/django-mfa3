@@ -1,0 +1,13 @@
+<ul>
+    {% for key in object_list %}
+        <li>
+            {{ key.name }} ({{ key.method }})
+            <a href="{% url 'mfa:delete' key.id %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No keys yet</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'mfa:create' 'TOTP' %}">Create TOTP key</a>
+<a href="{% url 'mfa:create' 'FIDO2' %}">Create FIDO2 key</a>
