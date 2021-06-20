@@ -1,0 +1,1 @@
+recursive-include mfa/templates *.html
