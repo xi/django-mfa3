@@ -1,8 +1,19 @@
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
 from django.views.generic import ListView
 
+from .forms import MFAAuthForm
+from .forms import MFACreateForm
+from .mixins import MFAFormView
 from .models import MFAKey
 
 
@@ -15,3 +26,60 @@ class MFADeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('mfa:list')
+
+
+class MFACreateView(LoginRequiredMixin, MFAFormView):
+    form_class = MFACreateForm
+
+    def get_template_names(self):
+        return 'mfa/create_%s.html' % self.kwargs['method']
+
+    def get_success_url(self):
+        return reverse('mfa:list')
+
+    def begin(self):
+        return self.method.register_begin(self.request.user)
+
+    def complete(self, code):
+        return self.method.register_complete(self.pop_state(), code)
+
+    def form_valid(self, form):
+        MFAKey.objects.create(
+            user=self.request.user,
+            method=self.method.name,
+            name=form.cleaned_data['name'],
+            secret=form.cleaned_data['secret'],
+        )
+        messages.success(self.request, _('Key was created successfully!'))
+        return super().form_valid(form)
+
+
+class MFAAuthView(MFAFormView):
+    form_class = MFAAuthForm
+
+    def get_template_names(self):
+        return 'mfa/auth_%s.html' % self.kwargs['method']
+
+    @cached_property
+    def user(self):
+        try:
+            user_data = self.request.session['mfa_user']
+        except KeyError as e:
+            raise Http404 from e
+        User = get_user_model()
+        user = get_object_or_404(User, pk=user_data['pk'])
+        user.backend = user_data['backend']
+        return user
+
+    def begin(self):
+        return self.method.authenticate_begin(self.user)
+
+    def complete(self, code):
+        return self.method.authenticate_complete(
+            self.pop_state(), self.user, code,
+        )
+
+    def form_valid(self, form):
+        del self.request.session['mfa_user']
+        login(self.request, self.user)
+        return redirect(self.request.session.pop('mfa_success_url'))
