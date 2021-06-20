@@ -1,0 +1,15 @@
+<p>Open your TOTP app to get an authentication code.</p>
+
+<form method="POST">
+    {% csrf_token %}
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+    {% endfor %}
+    <label>
+        {{ form.code.label }}
+        {{ form.code }}
+    </label>
+    <button>Verify</button>
+</form>
+
+<a href="{% url 'mfa:auth' 'FIDO2' %}">Use FIDO2 instead</a>
