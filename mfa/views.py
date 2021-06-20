@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -15,6 +16,23 @@ from .forms import MFAAuthForm
 from .forms import MFACreateForm
 from .mixins import MFAFormView
 from .models import MFAKey
+
+
+class LoginView(DjangoLoginView):
+    def no_key_exists(self, form):
+        return super().form_valid(form)
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if not user.mfakey_set.exists():
+            return self.no_key_exists(form)
+
+        self.request.session['mfa_user'] = {
+            'pk': user.pk,
+            'backend': user.backend,
+        }
+        self.request.session['mfa_success_url'] = self.get_success_url()
+        return redirect('mfa:auth', 'FIDO2')
 
 
 class MFAListView(LoginRequiredMixin, ListView):
