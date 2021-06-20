@@ -1,0 +1,19 @@
+{% load static %}
+
+<p>You will be prompted to activate the device once you click "create".</p>
+
+<form data-fido2-create="{{ mfa_data }}" method="POST">
+    {% csrf_token %}
+    {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+    {% endfor %}
+    <label>
+        {{ form.name.label }}
+        {{ form.name }}
+    </label>
+    {{ form.code.as_hidden }}
+    <button>Create</button>
+</form>
+
+<script src="{% static 'cbor-js/cbor.js' %}"></script>
+<script src="{% static 'mfa/fido2.js' %}"></script>
