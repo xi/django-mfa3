@@ -12,3 +12,5 @@ class MFAKey(models.Model):
     ])
     name = models.CharField(max_length=32)
     secret = models.TextField()
+    # replay protection
+    last_code = models.CharField(max_length=32, blank=True)
