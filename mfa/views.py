@@ -17,6 +17,11 @@ from .forms import MFACreateForm
 from .mixins import MFAFormView
 from .models import MFAKey
 
+try:
+    from stronghold.views import StrongholdPublicMixin
+except ImportError:
+    from .mixins import DummyMixin as StrongholdPublicMixin
+
 
 class LoginView(DjangoLoginView):
     def no_key_exists(self, form):
@@ -72,7 +77,7 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return super().form_valid(form)
 
 
-class MFAAuthView(MFAFormView):
+class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     form_class = MFAAuthForm
 
     def get_template_names(self):

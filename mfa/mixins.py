@@ -5,6 +5,10 @@ from . import fido2
 from . import totp
 
 
+class DummyMixin:
+    pass
+
+
 class MFAFormView(FormView):
     @property
     def method(self):
