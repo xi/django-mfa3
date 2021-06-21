@@ -33,7 +33,9 @@ because it is now superseded by FIDO2. Email and Trusted Devices were dropped
 because I felt like they have inferior security properties compared to FIDO2
 and TOTP.
 
-django-mfa3 is compatible with
+It is recommended to use django-mfa3 with
+[django-axes](https://github.com/jazzband/django-axes) for rate limiting. It is
+also compatible with
 [django-stronghold](https://github.com/mgrouchy/django-stronghold/).
 
 ## Security considerations
@@ -47,7 +49,3 @@ response. The server keeps some state in the session across these requests. For
 example, the user is temporarily stored in the session until the second factor
 authentication is done. The logic for handling this state is not as straight
 forward as I would like and there might be issues hidden in there.
-
-The [pyotp README](https://github.com/pyauth/pyotp#readme) mentions some
-countermeasures for brute force or replay attacks. Those are planned, but have
-not yet been implemented.
