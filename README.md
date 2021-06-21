@@ -33,6 +33,9 @@ because it is now superseded by FIDO2. Email and Trusted Devices were dropped
 because I felt like they have inferior security properties compared to FIDO2
 and TOTP.
 
+django-mfa3 is compatible with
+[django-stronghold](https://github.com/mgrouchy/django-stronghold/).
+
 ## Security considerations
 
 The actual cryptography is handled by pyotp and python-fido2. This library only
