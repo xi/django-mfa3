@@ -3,6 +3,12 @@
 A reusable Django app that handles multi factor authentication via FIDO2 and
 TOTP.
 
+## Status
+
+This is currently just an experiment. I do not really want to maintain it long
+term as I do not focus on security or django usually. If you would like to take
+ownership of this project, please contact me!
+
 ## Installation
 
 ```
