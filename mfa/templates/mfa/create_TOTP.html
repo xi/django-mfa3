@@ -2,7 +2,8 @@
 
 <p>Scan the code with your TOTP app and enter a valid code to finish registration.</p>
 
-<img data-qr="{{ mfa_data.url }}" alt="{{ mfa_data.secret }}" />
+{{ mfa_data.qrcode|safe }}
+{{ mfa_data.secret }}
 
 <form method="POST">
     {% csrf_token %}
@@ -19,6 +20,3 @@
     </label>
     <button>Create</button>
 </form>
-
-<script src="{% static 'qrious/dist/qrious.js' %}"></script>
-<script src="{% static 'mfa/qr.js' %}"></script>

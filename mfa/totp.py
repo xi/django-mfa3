@@ -1,7 +1,20 @@
+from io import BytesIO
+
 import pyotp
+import qrcode
+import qrcode.image.svg
 from django.conf import settings
 
 name = 'TOTP'
+
+
+def get_qrcode(url):
+    buf = BytesIO()
+    img = qrcode.make(url, image_factory=qrcode.image.svg.SvgImage)
+    img.save(buf)
+    s = buf.getvalue().decode('utf-8')
+    i = s.find('<svg')
+    return s[i:]
 
 
 def register_begin(user):
@@ -11,7 +24,12 @@ def register_begin(user):
         user.username,
         issuer_name=settings.MFA_SITE_TITLE,
     )
-    return {'url': url, 'secret': secret}, secret
+    context_data = {
+        'url': url,
+        'secret': secret,
+        'qrcode': get_qrcode(url),
+    }
+    return context_data, secret
 
 
 def register_complete(state, request_data):
