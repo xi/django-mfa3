@@ -39,6 +39,12 @@ because it is now superseded by FIDO2. Email and Trusted Devices were dropped
 because I felt like they have inferior security properties compared to FIDO2
 and TOTP.
 
+Another major inspiration is
+[django-otp](https://github.com/django-otp/django-otp). It is probably the most
+mature library when it comes to two factor authentication in django. However,
+its [basic structure is not compatible with
+FIDO2](https://github.com/django-otp/django-otp/issues/40).
+
 It is recommended to use django-mfa3 with
 [django-axes](https://github.com/jazzband/django-axes) for rate limiting. It is
 also compatible with
