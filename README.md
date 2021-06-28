@@ -5,9 +5,8 @@ TOTP.
 
 ## Status
 
-This is currently just an experiment. I do not really want to maintain it long
-term as I do not focus on security or django usually. If you would like to take
-ownership of this project, please contact me!
+I am not whether I will be able to maintain this libabry long-term. If you
+would like to help or even take ownership of this project, please contact me!
 
 ## Installation
 
