@@ -38,7 +38,10 @@ class LoginView(DjangoLoginView):
             'backend': user.backend,
         }
         self.request.session['mfa_success_url'] = self.get_success_url()
-        return redirect('mfa:auth', 'FIDO2')
+        if user.mfakey_set.filter(method='FIDO2').exists():
+            return redirect('mfa:auth', 'FIDO2')
+        else:
+            return redirect('mfa:auth', 'TOTP')
 
 
 class MFAListView(LoginRequiredMixin, ListView):
