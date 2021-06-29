@@ -1,4 +1,4 @@
-0.1.0 (unreleased)
+0.1.0 (2021-06-29)
 ------------------
 
 -   Trigger `user_login_failed` on failed second factor. This can be used to
