@@ -23,6 +23,13 @@ pip install django-mfa3
 5.  The included templates are just examples, so you should replace them with your own.
 6.  Somewhere in your app, add a link to `'mfa:list'`
 
+## Enforce MFA
+
+Optionally, you can add `'mfa.middleware.MFAEnforceMiddleware'` to `MIDDLEWARE`
+(after `AuthenticationMiddleware`!). It will redirect all authenticated
+requests to `'mfa:list'` as long as the user has no MFAKeys. You can use
+`mfa.decorators.public` to add exceptions.
+
 ## Related projects
 
 django-mfa3 is based on [pyotp](https://github.com/pyauth/pyotp) and
