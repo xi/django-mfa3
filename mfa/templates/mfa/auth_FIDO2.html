@@ -1,15 +1,17 @@
 {% load static %}
 
+<h1>Two-factor authentication</h1>
+<p>When you are ready to authenticate with FIDO2, press the button below.</p>
+
 <form data-fido2-auth="{{ mfa_data }}" method="POST">
     {% csrf_token %}
     {% for error in form.errors %}
         <p>{{ error }}</p>
     {% endfor %}
     {{ form.code.as_hidden }}
-    <button autofocus>Use security key</button>
+    <button autofocus>Verify</button>
+    <a href="{% url 'mfa:auth' 'TOTP' %}">Use TOTP instead</a>
 </form>
-
-<a href="{% url 'mfa:auth' 'TOTP' %}">Use TOTP instead</a>
 
 <script src="{% static 'cbor-js/cbor.js' %}"></script>
 <script src="{% static 'mfa/fido2.js' %}"></script>

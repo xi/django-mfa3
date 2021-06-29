@@ -1,3 +1,4 @@
+<h1>Two-factor authentication</h1>
 <p>Open your TOTP app to get an authentication code.</p>
 
 <form method="POST">
@@ -10,6 +11,5 @@
         {{ form.code }}
     </label>
     <button>Verify</button>
+    <a href="{% url 'mfa:auth' 'FIDO2' %}">Use FIDO2 instead</a>
 </form>
-
-<a href="{% url 'mfa:auth' 'FIDO2' %}">Use FIDO2 instead</a>
