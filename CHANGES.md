@@ -1,3 +1,12 @@
+0.2.0 (unreleased)
+------------------
+
+-   Convert qrcode to template filter. In templates, change
+    `{{ mfa_data.qrcode|safe }}` to `{% load mfa %} {{ mfa_data.url|qrcode }}`.
+-   Fix form validation on missing code
+-   Add german translation
+
+
 0.1.0 (2021-06-29)
 ------------------
 
