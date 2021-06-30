@@ -1,8 +1,8 @@
-{% load static %}
+{% load static mfa %}
 
 <p>Scan the code with your TOTP app and enter a valid code to finish registration.</p>
 
-{{ mfa_data.qrcode|safe }}
+{{ mfa_data.url|qrcode }}
 {{ mfa_data.secret }}
 
 <form method="POST">
