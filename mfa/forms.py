@@ -7,10 +7,12 @@ class MFAAuthForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        try:
-            cleaned_data['secret'] = self.complete(cleaned_data['code'])
-        except ValueError as e:
-            raise forms.ValidationError(_('Validation failed')) from e
+        code = cleaned_data.get('code')
+        if code:
+            try:
+                cleaned_data['secret'] = self.complete(code)
+            except ValueError as e:
+                raise forms.ValidationError(_('Validation failed')) from e
         return cleaned_data
 
 
