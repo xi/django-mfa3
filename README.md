@@ -5,7 +5,7 @@ TOTP.
 
 ## Status
 
-I am not whether I will be able to maintain this libabry long-term. If you
+I am not sure whether I will be able to maintain this library long-term. If you
 would like to help or even take ownership of this project, please contact me!
 
 ## Installation
