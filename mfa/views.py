@@ -87,6 +87,9 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     def get_template_names(self):
         return 'mfa/auth_%s.html' % self.kwargs['method']
 
+    def get_success_url(self):
+        return self.request.session.pop('mfa_success_url')
+
     @cached_property
     def user(self):
         try:
@@ -118,6 +121,6 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
-        del self.request.session['mfa_user']
         login(self.request, self.user)
-        return redirect(self.request.session.pop('mfa_success_url'))
+        del self.request.session['mfa_user']
+        return super().form_valid(form)
