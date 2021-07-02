@@ -9,7 +9,7 @@ setup(
     url='https://github.com/xi/django-mfa3',
     author='Tobias Bengfort',
     author_email='tobias.bengfort@posteo.de',
-    version='0.1.0',
+    version='0.2.0',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
