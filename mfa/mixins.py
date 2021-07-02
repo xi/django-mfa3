@@ -22,9 +22,9 @@ class MFAFormView(FormView):
         else:
             raise Http404
 
-    def pop_state(self):
+    def get_state(self):
         try:
-            return self.request.session.pop('mfa_state')
+            return self.request.session['mfa_state']
         except KeyError as e:
             raise Http404 from e
 
@@ -42,3 +42,7 @@ class MFAFormView(FormView):
         form = super().get_form()
         form.complete = self.complete
         return form
+
+    def form_valid(self, form):
+        del self.request.session['mfa_state']
+        return super().form_valid(form)

@@ -68,7 +68,7 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return self.method.register_begin(self.request.user)
 
     def complete(self, code):
-        return self.method.register_complete(self.pop_state(), code)
+        return self.method.register_complete(self.get_state(), code)
 
     def form_valid(self, form):
         MFAKey.objects.create(
@@ -106,7 +106,7 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
 
     def complete(self, code):
         return self.method.authenticate_complete(
-            self.pop_state(), self.user, code,
+            self.get_state(), self.user, code,
         )
 
     def form_invalid(self, form):
