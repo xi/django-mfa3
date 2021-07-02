@@ -1,12 +1,16 @@
 # django-mfa3
 
-A reusable Django app that handles multi factor authentication via FIDO2 and
-TOTP.
+An opinionated Django app that handles multi factor authentication (MFA) via
+FIDO2 and TOTP.
 
-## Status
+## Features
 
-I am not sure whether I will be able to maintain this library long-term. If you
-would like to help or even take ownership of this project, please contact me!
+-   Two factor authentication is required on login (if the user has registered a key)
+-   Stuff just works without much configuration
+-   The UI allows not only to add new keys, but also to remove keys that have been compromised
+-   You can optionally enforce MFA for all users
+-   You can (and should) customize the templates
+-   Simple code, few dependencies
 
 ## Installation
 
@@ -29,6 +33,11 @@ Optionally, you can add `'mfa.middleware.MFAEnforceMiddleware'` to `MIDDLEWARE`
 (after `AuthenticationMiddleware`!). It will redirect all authenticated
 requests to `'mfa:list'` as long as the user has no MFAKeys. You can use
 `mfa.decorators.public` to add exceptions.
+
+## Status
+
+I am not sure whether I will be able to maintain this library long-term. If you
+would like to help or even take ownership of this project, please contact me!
 
 ## Related projects
 
