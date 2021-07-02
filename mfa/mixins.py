@@ -1,4 +1,7 @@
 from django.http import Http404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView
 
 from . import fido2
@@ -24,6 +27,11 @@ class MFAFormView(FormView):
             return self.request.session.pop('mfa_state')
         except KeyError as e:
             raise Http404 from e
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

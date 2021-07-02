@@ -5,6 +5,7 @@
     `{{ mfa_data.qrcode|safe }}` to `{% load mfa %} {{ mfa_data.url|qrcode }}`.
 -   Fix form validation on missing code
 -   Add german translation
+-   use `never_cache` and `sensitive_post_parameters` decorators
 
 
 0.1.0 (2021-06-29)
