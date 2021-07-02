@@ -22,9 +22,10 @@ class MFAFormView(FormView):
         else:
             raise Http404
 
-    def get_state(self):
+    @property
+    def challenge(self):
         try:
-            return self.request.session['mfa_state']
+            return self.request.session['mfa_challenge']
         except KeyError as e:
             raise Http404 from e
 
@@ -35,7 +36,9 @@ class MFAFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['mfa_data'], self.request.session['mfa_state'] = self.begin()
+        data, state = self.begin()
+        self.request.session['mfa_challenge'] = (data, state)
+        context['mfa_data'] = data
         return context
 
     def get_form(self):
@@ -44,5 +47,5 @@ class MFAFormView(FormView):
         return form
 
     def form_valid(self, form):
-        del self.request.session['mfa_state']
+        del self.request.session['mfa_challenge']
         return super().form_valid(form)
