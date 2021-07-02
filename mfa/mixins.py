@@ -36,15 +36,22 @@ class MFAFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        data, state = self.begin()
-        self.request.session['mfa_challenge'] = (data, state)
-        context['mfa_data'] = data
+        if 'mfa_data' not in context:
+            data, state = self.begin()
+            self.request.session['mfa_challenge'] = (data, state)
+            context['mfa_data'] = data
         return context
 
     def get_form(self):
         form = super().get_form()
         form.complete = self.complete
         return form
+
+    def form_invalid(self, form):
+        # do not generate a new challenge
+        return self.render_to_response(self.get_context_data(
+            form=form, mfa_data=self.challenge[0]
+        ))
 
     def form_valid(self, form):
         del self.request.session['mfa_challenge']
