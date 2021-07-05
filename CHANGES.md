@@ -1,7 +1,13 @@
+0.2.2 (unreleased)
+------------------
+
+-   Fix packaging: include templatetags
+
+
 0.2.1 (2021-07-02)
 ------------------
 
--   Fix packaging
+-   Fix packaging: exclude tests
 
 
 0.2.0 (2021-07-02)
