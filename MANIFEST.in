@@ -1,0 +1,3 @@
+recursive-include mfa/templates *.html
+recursive-include mfa/static *.js
+recursive-include mfa/locale *.po
