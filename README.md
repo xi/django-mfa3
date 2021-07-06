@@ -43,8 +43,7 @@ would like to help or even take ownership of this project, please contact me!
 
 django-mfa3 is based on [pyotp](https://github.com/pyauth/pyotp) and
 [python-fido2](https://github.com/Yubico/python-fido2). The example frontend
-code also uses [cbor-js](https://www.npmjs.com/package/cbor-js) and
-[qrious](https://www.npmjs.com/package/qrious).
+code also uses [cbor-js](https://www.npmjs.com/package/cbor-js).
 
 It is inspired by but not otherwise affiliated with
 [django-mfa2](https://github.com/mkalioby/django-mfa2).
