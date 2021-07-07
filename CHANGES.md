@@ -1,3 +1,9 @@
+0.2.4 (2021-07-07)
+------------------
+
+-   Security fix: Do not allow users to see/delete other user's keys
+
+
 0.2.3 (2021-07-05)
 ------------------
 
