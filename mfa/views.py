@@ -47,9 +47,15 @@ class LoginView(DjangoLoginView):
 class MFAListView(LoginRequiredMixin, ListView):
     model = MFAKey
 
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
+
 
 class MFADeleteView(LoginRequiredMixin, DeleteView):
     model = MFAKey
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)
 
     def get_success_url(self):
         return reverse('mfa:list')
