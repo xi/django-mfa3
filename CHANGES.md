@@ -1,7 +1,8 @@
 0.2.4 (2021-07-07)
 ------------------
 
--   Security fix: Do not allow users to see/delete other user's keys
+-   Security fix: Do not allow users to see the names of/delete other user's
+    keys (secrets were not leaked)
 
 
 0.2.3 (2021-07-05)
