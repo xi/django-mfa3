@@ -8,7 +8,7 @@ def register_begin(user):
     secret = pyotp.random_base32()
     totp = pyotp.TOTP(secret)
     url = totp.provisioning_uri(
-        user.username,
+        user.get_username(),
         issuer_name=settings.MFA_SITE_TITLE,
     )
     return {'url': url, 'secret': secret}, secret
