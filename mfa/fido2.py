@@ -35,7 +35,7 @@ def register_begin(user):
     registration_data, state = fido2.register_begin(
         {
             'id': str(user.id).encode('utf-8'),
-            'name': user.username,
+            'name': user.get_username(),
             'displayName': user.get_full_name(),
         },
         get_credentials(user),
