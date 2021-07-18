@@ -2,6 +2,7 @@
 ------------------
 
 -   Fix usage with custom User models that use a different username field
+    (thanks to Ashok Argent-Katwala)
 
 
 0.2.4 (2021-07-07)
