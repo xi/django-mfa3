@@ -1,3 +1,9 @@
+0.2.5 (2021-07-18)
+------------------
+
+-   Fix usage with custom User models that use a different username field
+
+
 0.2.4 (2021-07-07)
 ------------------
 
