@@ -1,5 +1,10 @@
 <h1>Two-factor authentication</h1>
-<p>Open your TOTP app to get an authentication code.</p>
+
+<p>
+    <strong>WARNING</strong>:
+    The recovery code will be removed after it has been used.
+    Make sure to create a new one after login!
+</p>
 
 <form method="POST">
     {% csrf_token %}
@@ -12,5 +17,5 @@
     </label>
     <button>Verify</button>
     <a href="{% url 'mfa:auth' 'FIDO2' %}">Use FIDO2 instead</a>
-    <a href="{% url 'mfa:auth' 'recovery' %}">Use recovery code instead</a>
+    <a href="{% url 'mfa:auth' 'TOTP' %}">Use TOTP instead</a>
 </form>

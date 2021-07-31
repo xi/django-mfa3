@@ -5,6 +5,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView
 
 from . import fido2
+from . import recovery
 from . import totp
 
 
@@ -19,6 +20,8 @@ class MFAFormView(FormView):
             return fido2
         elif self.kwargs['method'] == 'TOTP':
             return totp
+        elif self.kwargs['method'] == 'recovery':
+            return recovery
         else:
             raise Http404
 
