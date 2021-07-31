@@ -1,6 +1,8 @@
 import pyotp
 from django.test import TestCase
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+
 from mfa.models import MFAKey
 from mfa.templatetags.mfa import get_qrcode
 
@@ -180,6 +182,63 @@ class FIDO2Test(MFATestCase):
         self.client.force_login(self.user)
         res = self.client.get('/mfa/create/FIDO2/')
         self.assertEqual(res.status_code, 200)
+
+
+class RecoveryTest(MFATestCase):
+    def test_create(self):
+        self.client.force_login(self.user)
+
+        res = self.client.get('/mfa/create/recovery/')
+        self.assertEqual(res.status_code, 200)
+        code = res.context['mfa_data']['code']
+        self.assertEqual(len(code), 11)
+
+        res = self.client.post('/mfa/create/recovery/', {
+            'name': 'test',
+            'code': 'invalid',
+        })
+        self.assertEqual(res.status_code, 200)
+
+        res = self.client.post('/mfa/create/recovery/', {
+            'name': 'test',
+            'code': code,
+        })
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/mfa/')
+
+        self.assertEqual(MFAKey.objects.count(), 1)
+
+    def test_authenticate(self):
+        MFAKey.objects.create(
+            user=self.user,
+            method='FIDO2',
+            name='test',
+            secret='mock',
+        )
+        MFAKey.objects.create(
+            user=self.user,
+            method='recovery',
+            name='recovery',
+            secret=make_password('123456'),
+        )
+
+        res = self.login()
+        self.assertEqual(res.status_code, 302)
+
+        res = self.client.get('/mfa/auth/recovery/')
+        self.assertEqual(res.status_code, 200)
+
+        res = self.client.post('/mfa/auth/recovery/', {'code': 'invalid'})
+        self.assertEqual(res.status_code, 200)
+
+        res = self.client.post('/mfa/auth/recovery/', {'code': '123456'})
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/')
+
+        res = self.client.get('/')
+        self.assertEqual(res.status_code, 204)
+
+        self.assertEqual(MFAKey.objects.count(), 1)
 
 
 class MFAEnforceMiddlewareTest(MFATestCase):

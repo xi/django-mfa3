@@ -9,6 +9,7 @@ class MFAKey(models.Model):
     method = models.CharField(max_length=8, choices=[
         ('FIDO2', 'FIDO2'),
         ('TOTP', 'TOTP'),
+        ('recovery', 'recovery'),
     ])
     name = models.CharField(max_length=32)
     secret = models.TextField()

@@ -1,7 +1,7 @@
 # django-mfa3
 
 An opinionated Django app that handles multi factor authentication (MFA) via
-FIDO2 and TOTP.
+FIDO2, TOTP, and recovery codes.
 
 ## Features
 
