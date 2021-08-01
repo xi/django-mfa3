@@ -7,7 +7,7 @@ FIDO2 and TOTP.
 
 -   Two factor authentication is required on login (if the user has registered a key)
 -   Stuff just works without much configuration
--   The UI allows not only to add new keys, but also to remove keys that have been compromised
+-   The UI allows to add new keys and to remove keys that have been compromised
 -   You can optionally enforce MFA for all users
 -   You can (and should) customize the templates
 -   Simple code, few dependencies
@@ -24,7 +24,7 @@ pip install django-mfa3
 2.  Use `mfa.views.LoginView` instead of the regular login view
 3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`
 4.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
-5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own.
+5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own
 6.  Somewhere in your app, add a link to `'mfa:list'`
 
 ## Enforce MFA
