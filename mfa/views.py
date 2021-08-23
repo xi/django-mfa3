@@ -15,6 +15,7 @@ from django.views.generic import ListView
 
 from .forms import MFAAuthForm
 from .forms import MFACreateForm
+from .mixins import METHODS
 from .mixins import MFAFormView
 from .models import MFAKey
 
@@ -38,10 +39,9 @@ class LoginView(DjangoLoginView):
             'backend': user.backend,
         }
         self.request.session['mfa_success_url'] = self.get_success_url()
-        if user.mfakey_set.filter(method='FIDO2').exists():
-            return redirect('mfa:auth', 'FIDO2')
-        else:
-            return redirect('mfa:auth', 'TOTP')
+        for method in METHODS:
+            if user.mfakey_set.filter(method=method).exists():
+                return redirect('mfa:auth', method)
 
 
 class MFAListView(LoginRequiredMixin, ListView):
