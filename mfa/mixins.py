@@ -4,10 +4,10 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView
 
-from . import fido2
-from . import recovery
 from . import settings
-from . import totp
+from .methods import fido2
+from .methods import recovery
+from .methods import totp
 
 
 class DummyMixin:

@@ -1,6 +1,6 @@
 import pyotp
 
-from . import settings
+from .. import settings
 
 name = 'TOTP'
 

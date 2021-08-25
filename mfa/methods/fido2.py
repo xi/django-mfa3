@@ -10,7 +10,7 @@ from fido2.utils import websafe_decode
 from fido2.utils import websafe_encode
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
-from . import settings
+from .. import settings
 
 name = 'FIDO2'
 
