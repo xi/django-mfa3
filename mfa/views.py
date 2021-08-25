@@ -94,7 +94,11 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
         return 'mfa/auth_%s.html' % self.kwargs['method']
 
     def get_success_url(self):
-        return self.request.session.pop('mfa_success_url')
+        success_url = self.request.session.pop('mfa_success_url')
+        if self.method.name == 'recovery':
+            return reverse('mfa:list')
+        else:
+            return success_url
 
     @cached_property
     def user(self):

@@ -1,8 +1,7 @@
 {% load static mfa %}
 
-<p>A recovery code can be used when you lose access to your other two-factor authentication options.</p>
-<p>Make sure to store it in a safe place! If you lose your device and don’t have the recovery codes you will lose access to your account.</p>
-<p>Each recovery code can only be used once.</p>
+<p>A recovery code can be used when you lose access to your other two-factor authentication options. Each recovery code can only be used once.</p>
+<p>Make sure to store it in a safe place! If you lose your login keys and don’t have the recovery codes you will lose access to your account.</p>
 
 <form method="POST">
     {% csrf_token %}
@@ -16,6 +15,10 @@
     <label>
         {{ form.code.label }}
         <input name="code" value="{{ mfa_data.code }}" readonly>
+    </label>
+    <label>
+        <input type="checkbox" required>
+        I have savely stored the code
     </label>
     <button>Create</button>
 </form>

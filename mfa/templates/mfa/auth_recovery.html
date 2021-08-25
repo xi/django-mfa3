@@ -1,5 +1,10 @@
 <h1>Two-factor authentication</h1>
-<p>Enter your recovery code.</p>
+
+<p>
+    <strong>WARNING</strong>:
+    The recovery code will be removed after it has been used.
+    Make sure to create a new one after login!
+</p>
 
 <form method="POST">
     {% csrf_token %}
