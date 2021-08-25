@@ -1,6 +1,5 @@
 import json
 
-from django.conf import settings
 from fido2 import cbor
 from fido2.client import ClientData
 from fido2.ctap2 import AttestationObject
@@ -11,10 +10,12 @@ from fido2.utils import websafe_decode
 from fido2.utils import websafe_encode
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
+from . import settings
+
 name = 'FIDO2'
 
 fido2 = Fido2Server(PublicKeyCredentialRpEntity(
-    settings.MFA_DOMAIN, settings.MFA_SITE_TITLE
+    settings.DOMAIN, settings.SITE_TITLE
 ))
 
 

@@ -13,9 +13,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
 from django.views.generic import ListView
 
+from . import settings
 from .forms import MFAAuthForm
 from .forms import MFACreateForm
-from .mixins import METHODS
 from .mixins import MFAFormView
 from .models import MFAKey
 
@@ -39,7 +39,7 @@ class LoginView(DjangoLoginView):
             'backend': user.backend,
         }
         self.request.session['mfa_success_url'] = self.get_success_url()
-        for method in METHODS:
+        for method in settings.METHODS:
             if user.mfakey_set.filter(method=method).exists():
                 return redirect('mfa:auth', method)
 

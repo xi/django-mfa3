@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -7,9 +6,8 @@ from django.views.generic import FormView
 
 from . import fido2
 from . import recovery
+from . import settings
 from . import totp
-
-METHODS = getattr(settings, 'MFA_METHODS', ['FIDO2', 'TOTP', 'recovery'])
 
 
 class DummyMixin:
@@ -19,7 +17,7 @@ class DummyMixin:
 class MFAFormView(FormView):
     @property
     def method(self):
-        if self.kwargs['method'] in METHODS:
+        if self.kwargs['method'] in settings.METHODS:
             if self.kwargs['method'] == 'FIDO2':
                 return fido2
             elif self.kwargs['method'] == 'TOTP':

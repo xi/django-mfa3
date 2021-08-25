@@ -1,5 +1,6 @@
 import pyotp
-from django.conf import settings
+
+from . import settings
 
 name = 'TOTP'
 
@@ -9,7 +10,7 @@ def register_begin(user):
     totp = pyotp.TOTP(secret)
     url = totp.provisioning_uri(
         user.get_username(),
-        issuer_name=settings.MFA_SITE_TITLE,
+        issuer_name=settings.SITE_TITLE,
     )
     return {'url': url, 'secret': secret}, secret
 
