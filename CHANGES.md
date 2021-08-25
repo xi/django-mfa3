@@ -1,3 +1,11 @@
+0.3.0 (2021-08-25)
+------------------
+
+-   Add recovery codes. Check the example templates for references to
+    "recovery" to see what needs to be changed.
+-   Add new setting `MFA_METHODS` to change the set of enabled methods.
+
+
 0.2.5 (2021-07-18)
 ------------------
 
