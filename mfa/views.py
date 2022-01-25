@@ -122,10 +122,7 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     def form_invalid(self, form):
         user_login_failed.send(
             sender=__name__,
-            credentials={
-                'username': self.user.get_username(),
-                'code': form.cleaned_data.get('code'),
-            },
+            credentials={'username': self.user.get_username()},
             request=self.request,
         )
         return super().form_invalid(form)
