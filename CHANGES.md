@@ -1,3 +1,11 @@
+0.4.0 (2022-01-25)
+------------------
+
+-   Drop support for python 3.6, add support for python 3.10
+-   Drop support for django 3.1, add support for django 4.0
+-   No longer include MFA code in credentials for `user_login_failed`
+
+
 0.3.0 (2021-08-25)
 ------------------
 
