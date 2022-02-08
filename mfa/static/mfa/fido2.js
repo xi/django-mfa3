@@ -1,16 +1,16 @@
 (function() {
     var encode = function(data) {
         var buffer = CBOR.encode(data);
-        var typed_arr = new Uint8Array(buffer);
-        var arr = Array.from(typed_arr);
-        return JSON.stringify(arr);
+        var arr = new Uint8Array(buffer);
+        return arr.reduce((s, b) => s + b.toString(16).padStart(2, '0'), '');
     };
 
-    var decode = function(json) {
-        var arr = JSON.parse(json);
-        var typed_arr = new Uint8Array(arr);
-        var buffer = typed_arr.buffer;
-        return CBOR.decode(buffer);
+    var decode = function(hex) {
+        var arr = new Uint8Array(hex.length / 2);
+        for (var i = 0; i < arr.length; i += 1) {
+            arr[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+        }
+        return CBOR.decode(arr.buffer);
     };
 
     var initCreate = function() {

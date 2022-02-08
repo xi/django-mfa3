@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 
+from mfa.methods import fido2
 from mfa.models import MFAKey
 from mfa.templatetags.mfa import get_qrcode
 
@@ -182,6 +183,12 @@ class FIDO2Test(MFATestCase):
         self.client.force_login(self.user)
         res = self.client.get('/mfa/create/FIDO2/')
         self.assertEqual(res.status_code, 200)
+
+    def test_encode(self):
+        self.assertEqual(fido2.encode({'foo': [1, 2]}), 'a163666f6f820102')
+
+    def test_decode(self):
+        self.assertEqual(fido2.decode('a163666f6f820102'), {'foo': [1, 2]})
 
 
 class RecoveryTest(MFATestCase):
