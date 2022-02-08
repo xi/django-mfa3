@@ -1,5 +1,3 @@
-import json
-
 from fido2 import cbor
 from fido2.client import ClientData
 from fido2.ctap2 import AttestationObject
@@ -20,11 +18,11 @@ fido2 = Fido2Server(PublicKeyCredentialRpEntity(
 
 
 def encode(data):
-    return json.dumps(list(cbor.encode(data)), separators=(',', ':'))
+    return cbor.encode(data).hex()
 
 
 def decode(s):
-    return cbor.decode(bytes(json.loads(s)))
+    return cbor.decode(bytes.fromhex(s))
 
 
 def get_credentials(user):
