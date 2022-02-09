@@ -75,3 +75,9 @@ response. The server keeps some state in the session across these requests. For
 example, the user is temporarily stored in the session until the second factor
 authentication is done. The logic for handling this state is not as straight
 forward as I would like and there might be issues hidden in there.
+
+Please also be careful when implementing and using this library in your project
+to prevent higher level security or usability issues. Please refer to other
+guidelines like the
+[OWASP Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html)
+for more informaton on that topic.
