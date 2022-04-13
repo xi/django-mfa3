@@ -33,6 +33,12 @@ class MFAFormView(FormView):
         except KeyError as e:
             raise Http404 from e
 
+    def begin(self):
+        raise NotImplementedError
+
+    def complete(self, code):
+        raise NotImplementedError
+
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
     def dispatch(self, *args, **kwargs):
