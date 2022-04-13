@@ -5,12 +5,16 @@ from django.utils.translation import gettext_lazy as _
 class MFAAuthForm(forms.Form):
     code = forms.CharField(label=_('Authentication code'))
 
+    def __init__(self, validate_code=None, **kwargs):
+        self.validate_code = validate_code
+        super().__init__(**kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
         code = cleaned_data.get('code')
         if code:
             try:
-                cleaned_data['secret'] = self.complete(code)
+                cleaned_data['secret'] = self.validate_code(code)
             except ValueError as e:
                 raise forms.ValidationError(_('Validation failed')) from e
         return cleaned_data
