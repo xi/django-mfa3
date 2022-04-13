@@ -46,10 +46,10 @@ class MFAFormView(FormView):
             context['mfa_data'] = data
         return context
 
-    def get_form(self):
-        form = super().get_form()
-        form.complete = self.complete
-        return form
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['validate_code'] = self.complete
+        return kwargs
 
     def form_invalid(self, form):
         # do not generate a new challenge
