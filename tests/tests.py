@@ -262,6 +262,31 @@ class MFAEnforceMiddlewareTest(MFATestCase):
         self.assertEqual(res.url, '/')
 
 
+class PatchAdminTest(TestCase):
+    def test_root(self):
+        res = self.client.get('/admin/')
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/admin/login/?next=/admin/')
+
+        res = self.client.get(res.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/login/?next=/admin/')
+
+    def test_app(self):
+        res = self.client.get('/admin/mfa/')
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/admin/login/?next=/admin/mfa/')
+
+        res = self.client.get(res.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/login/?next=/admin/mfa/')
+
+    def test_login(self):
+        res = self.client.get('/admin/login/')
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/login/?next=/admin/')
+
+
 class QRCodeTest(TestCase):
     def test_is_svg(self):
         code = get_qrcode('some_data')

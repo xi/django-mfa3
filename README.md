@@ -21,7 +21,10 @@ pip install django-mfa3
 ## Usage
 
 1.  Add `'mfa'` to `INSTALLED_APPS`
-2.  Use `mfa.views.LoginView` instead of the regular login view
+2.  Use `mfa.views.LoginView` instead of the regular login view. (Be sure to
+    remove any other login routes, otherwise the multi factor authentication
+    can be circumvented. The admin login will automatically be patched to
+    redirect to the regular login.)
 3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`
 4.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
 5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own

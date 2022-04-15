@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from django.http import HttpResponse
@@ -16,5 +17,6 @@ urlpatterns = [
     path('', login_required(dummy)),
     path('login/', LoginView.as_view()),
     path('logout/', public(LogoutView.as_view(next_page='/'))),
+    path('admin/', admin.site.urls),
     path('mfa/', include('mfa.urls', namespace='mfa')),
 ]
