@@ -1,3 +1,13 @@
+0.5.0 (2022-04-15)
+------------------
+
+-   Security fix: The admin login was not adapted, so it could be used to
+    bypass MFA. As a fix, django-mfa3 will now automatically patch `AdminSite`
+    so the admin login redirects to regular login.
+-   Drop support for django 2.2
+-   Use a more efficient string encoding for FIDO2 messages
+
+
 0.4.0 (2022-01-25)
 ------------------
 
