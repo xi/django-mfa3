@@ -3,7 +3,7 @@
 
 -   Security fix: The admin login was not adapted, so it could be used to
     bypass MFA. As a fix, django-mfa3 will now automatically patch `AdminSite`
-    so the admin login redirects to regular login.
+    so the admin login redirects to regular login. (CVE-2022-24857)
 -   Drop support for django 2.2
 -   Use a more efficient string encoding for FIDO2 messages
 
