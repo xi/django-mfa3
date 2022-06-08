@@ -13,7 +13,7 @@ setup(
     license='MIT',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
-    install_requires=['pyotp', 'fido2', 'qrcode', 'django>=2.2'],
+    install_requires=['pyotp', 'fido2<1.0.0', 'qrcode', 'django>=2.2'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
