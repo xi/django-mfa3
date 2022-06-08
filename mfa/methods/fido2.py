@@ -1,11 +1,11 @@
 from fido2 import cbor
-from fido2.client import ClientData
-from fido2.ctap2 import AttestationObject
-from fido2.ctap2 import AttestedCredentialData
-from fido2.ctap2 import AuthenticatorData
 from fido2.server import Fido2Server
 from fido2.utils import websafe_decode
 from fido2.utils import websafe_encode
+from fido2.webauthn import AttestationObject
+from fido2.webauthn import AttestedCredentialData
+from fido2.webauthn import AuthenticatorData
+from fido2.webauthn import CollectedClientData
 from fido2.webauthn import PublicKeyCredentialRpEntity
 
 from .. import settings
@@ -13,7 +13,7 @@ from .. import settings
 name = 'FIDO2'
 
 fido2 = Fido2Server(PublicKeyCredentialRpEntity(
-    settings.DOMAIN, settings.SITE_TITLE
+    id=settings.DOMAIN, name=settings.SITE_TITLE
 ))
 
 
@@ -46,7 +46,7 @@ def register_complete(state, request_data):
     data = decode(request_data)
     auth_data = fido2.register_complete(
         state,
-        ClientData(data['clientData']),
+        CollectedClientData(data['clientData']),
         AttestationObject(data['attestationObject']),
     )
     return websafe_encode(auth_data.credential_data)
@@ -64,7 +64,7 @@ def authenticate_complete(state, user, request_data):
         state,
         get_credentials(user),
         data['credentialId'],
-        ClientData(data['clientData']),
+        CollectedClientData(data['clientData']),
         AuthenticatorData(data['authenticatorData']),
         data['signature'],
     )
