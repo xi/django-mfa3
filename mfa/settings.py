@@ -9,3 +9,7 @@ SITE_TITLE = settings.MFA_SITE_TITLE
 
 # Available authentication methods in order of relevance
 METHODS = getattr(settings, 'MFA_METHODS', ['FIDO2', 'TOTP', 'recovery'])
+
+# `valid_window` parameter passed to PyOTP's verify method
+# See https://pyauth.github.io/pyotp/#pyotp.totp.TOTP.verify
+TOTP_VALID_WINDOW = getattr(settings, 'MFA_TOTP_VALID_WINDOW', 0)

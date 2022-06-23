@@ -30,7 +30,8 @@ def authenticate_complete(state, user, request_data):
     keys = user.mfakey_set.filter(method=name)
     for key in keys:
         totp = pyotp.TOTP(key.secret)
-        if totp.verify(request_data) and request_data != key.last_code:
+        if (totp.verify(request_data, valid_window=settings.TOTP_VALID_WINDOW)
+                and request_data != key.last_code):
             key.last_code = request_data
             key.save()
             return
