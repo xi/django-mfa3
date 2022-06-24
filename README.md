@@ -28,7 +28,8 @@ pip install django-mfa3
 3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`
 4.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
 5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own
-6.  Somewhere in your app, add a link to `'mfa:list'`
+6.  FIDO2 requires client side code. You can either implement it yourself or use the included fido2.js (in which case you will have to provide the third party library [cbor-js](https://www.npmjs.com/package/cbor-js)).
+7.  Somewhere in your app, add a link to `'mfa:list'`
 
 ## Enforce MFA
 
@@ -45,8 +46,7 @@ would like to help or even take ownership of this project, please contact me!
 ## Related projects
 
 django-mfa3 is based on [pyotp](https://github.com/pyauth/pyotp) and
-[python-fido2](https://github.com/Yubico/python-fido2). The example frontend
-code also uses [cbor-js](https://www.npmjs.com/package/cbor-js).
+[python-fido2](https://github.com/Yubico/python-fido2).
 
 It is inspired by but not otherwise affiliated with
 [django-mfa2](https://github.com/mkalioby/django-mfa2).
