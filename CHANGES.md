@@ -1,3 +1,10 @@
+0.7.0 (2022-06-24)
+------------------
+
+-   Add new setting `MFA_TOTP_VALID_WINDOW` to compensate for clock drifts
+    (thanks to Tobias Bölz)
+
+
 0.6.0 (2022-06-08)
 ------------------
 
