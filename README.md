@@ -38,6 +38,23 @@ Optionally, you can add `'mfa.middleware.MFAEnforceMiddleware'` to `MIDDLEWARE`
 requests to `'mfa:list'` as long as the user has no MFAKeys. You can use
 `mfa.decorators.public` to add exceptions.
 
+## Send email on failed login attempt
+
+If someone failes to login on the second factor that might indicate that the
+first factor (password) has been compromised. django-mfa3 will automatically
+send a warning to affected users under the following conditions:
+
+-   Django needs to be [configured for sending email](https://docs.djangoproject.com/en/4.1/topics/email/)
+-   There must be an email address associated with the user account
+-   You need to provide some templates
+    -   `mfa/login_failed_subject.txt`: optional, a default is included
+    -   `mfa/login_failed_email.txt`: required, an example is included in the
+        [tests](/tests/templates/mfa/login_failed_email.txt)
+    -   `mfa/login_failed_email.html`: optional
+
+All templates have access to the following context data: `email`, `domain`,
+`site_name`, `user`, `method`.
+
 ## Status
 
 I am not sure whether I will be able to maintain this library long-term. If you

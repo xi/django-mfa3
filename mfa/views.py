@@ -16,6 +16,7 @@ from django.views.generic import ListView
 from . import settings
 from .forms import MFAAuthForm
 from .forms import MFACreateForm
+from .mail import send_mail
 from .mixins import MFAFormView
 from .models import MFAKey
 
@@ -125,6 +126,7 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
             credentials={'username': self.user.get_username()},
             request=self.request,
         )
+        send_mail(self.user, self.method)
         return super().form_invalid(form)
 
     def form_valid(self, form):

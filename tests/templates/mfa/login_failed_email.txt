@@ -1,0 +1,6 @@
+Dear {{ user.username }},
+
+someone tried to log in to your account at {{ site_name }} ({{ domain }}).
+They managed to enter the correct password, but failed at {{ method }}.
+
+If this wasn't you we strongly recommend to change your password.

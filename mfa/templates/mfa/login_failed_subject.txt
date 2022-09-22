@@ -1,0 +1,3 @@
+{% load i18n %}{% autoescape off %}
+{% blocktranslate %}Failed login on {{ site_name }}{% endblocktranslate %}
+{% endautoescape %}
