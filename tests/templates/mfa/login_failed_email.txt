@@ -1,6 +1,10 @@
 Dear {{ user.username }},
 
-someone tried to log in to your account at {{ site_name }} ({{ domain }}).
-They managed to enter the correct password, but failed at {{ method }}.
+We detected an attempt to log in to your account on {{ site_name }}
+({{ domain }}) using a wrong two-factor authentication code. This means someone
+managed to enter the correct password, but failed at {{ method }}.
 
-If this wasn't you we strongly recommend to change your password.
+If this was you and you entered a wrong two-factor authentication code by
+accident, you may ignore this email.
+
+If this was not you, we strongly recommend to change your password.

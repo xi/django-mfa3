@@ -309,11 +309,15 @@ class MailTest(TestCase):
 
         message = mail.outbox[0]
         self.assertEqual(message.to, ['test@example.com'])
-        self.assertEqual(message.subject, 'Failed login on Tests')
+        self.assertEqual(message.subject, 'Attempted login to Tests using a wrong two-factor authentication code')  # noqa
         self.assertEqual(message.body, """Dear test,
 
-someone tried to log in to your account at Tests (localhost).
-They managed to enter the correct password, but failed at FIDO2.
+We detected an attempt to log in to your account on Tests
+(localhost) using a wrong two-factor authentication code. This means someone
+managed to enter the correct password, but failed at FIDO2.
 
-If this wasn't you we strongly recommend to change your password.
+If this was you and you entered a wrong two-factor authentication code by
+accident, you may ignore this email.
+
+If this was not you, we strongly recommend to change your password.
 """)
