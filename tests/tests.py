@@ -1,3 +1,5 @@
+from django.core import mail
+
 import pyotp
 from django.test import TestCase
 from django.contrib.auth.hashers import make_password
@@ -6,6 +8,7 @@ from django.contrib.auth.models import User
 from mfa.methods import fido2
 from mfa.models import MFAKey
 from mfa.templatetags.mfa import get_qrcode
+from mfa.mail import send_mail
 
 
 class MFATestCase(TestCase):
@@ -292,3 +295,29 @@ class QRCodeTest(TestCase):
         code = get_qrcode('some_data')
         self.assertTrue(code.startswith('<svg'))
         self.assertTrue(code.endswith('</svg>'))
+
+
+class MailTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            'test', password='password', email='test@example.com'
+        )
+
+    def test_send_mail(self):
+        count = send_mail(self.user, fido2)
+        self.assertEqual(count, 1)
+
+        message = mail.outbox[0]
+        self.assertEqual(message.to, ['test@example.com'])
+        self.assertEqual(message.subject, 'Attempted login to Tests using a wrong two-factor authentication code')  # noqa
+        self.assertEqual(message.body, """Dear test,
+
+We detected an attempt to log in to your account on Tests
+(localhost) using a wrong two-factor authentication code. This means someone
+managed to enter the correct password, but failed at FIDO2.
+
+If this was you and you entered a wrong two-factor authentication code by
+accident, you may ignore this email.
+
+If this was not you, we strongly recommend to change your password.
+""")
