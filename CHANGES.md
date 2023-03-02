@@ -1,3 +1,11 @@
+0.9.0 (2023-02-27)
+------------------
+
+-   Autofocus in auth form
+-   Work around rendering bug in qrcode (see
+    https://github.com/lincolnloop/python-qrcode/issues/317)
+
+
 0.8.0 (2022-12-08)
 ------------------
 
