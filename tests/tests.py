@@ -1,14 +1,13 @@
-from django.core import mail
-
 import pyotp
-from django.test import TestCase
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.core import mail
+from django.test import TestCase
 
+from mfa.mail import send_mail
 from mfa.methods import fido2
 from mfa.models import MFAKey
 from mfa.templatetags.mfa import get_qrcode
-from mfa.mail import send_mail
 
 
 class MFATestCase(TestCase):
