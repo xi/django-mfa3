@@ -2,5 +2,16 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.ruff]
+target-version = "py37"
+exclude = ["migrations"]
+select = ["E", "F", "W", "C9", "I", "Q"]
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "single"
+
+[tool.ruff.isort]
+force-single-line = true
+
 [tool.coverage.run]
 source = ["mfa"]

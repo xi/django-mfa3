@@ -5,11 +5,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
-    - run: pip install flake8 isort
+    - run: pip install ruff
     - name: linters
       run: |
-        flake8
-        isort -c mfa
+        ruff mfa tests
   test:
     runs-on: ubuntu-latest
     strategy:
