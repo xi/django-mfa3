@@ -9,7 +9,7 @@ def register_begin(user):
     secret = pyotp.random_base32()
     totp = pyotp.TOTP(secret, digits=10)
     code = totp.now()
-    code = '%s-%s' % (code[:5], code[5:])
+    code = f'{code[:5]}-{code[5:]}'
     state = make_password(code)
     return {'code': code}, state
 
