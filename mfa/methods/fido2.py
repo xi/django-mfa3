@@ -16,8 +16,7 @@ from .. import settings
 
 name = 'FIDO2'
 
-
-def _get_verify_origin_fn():
+def _get_verify_origin_fn(domain):
     """Do not require https on localhost in DEBUG mode.
 
     See https://github.com/Yubico/python-fido2/issues/122
@@ -28,9 +27,9 @@ def _get_verify_origin_fn():
         return any(is_same_domain(hostname, h) for h in allowed_hosts)
 
     def verify_localhost_origin(origin):
-        return urlparse(origin).hostname == settings.DOMAIN
+        return urlparse(origin).hostname == domain
 
-    if django_settings.DEBUG and is_localhost(settings.DOMAIN):
+    if django_settings.DEBUG and is_localhost(domain):
         return verify_localhost_origin
     else:
         return None
@@ -38,7 +37,7 @@ def _get_verify_origin_fn():
 
 fido2 = Fido2Server(
     PublicKeyCredentialRpEntity(id=settings.DOMAIN, name=settings.SITE_TITLE),
-    verify_origin=_get_verify_origin_fn(),
+    verify_origin=_get_verify_origin_fn(settings.DOMAIN),
 )
 
 

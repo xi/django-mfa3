@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core import mail
 from django.test import TestCase
+from fido2.server import _verify_origin_for_rp
 
 from mfa.mail import send_mail
 from mfa.methods import fido2
@@ -191,6 +192,28 @@ class FIDO2Test(MFATestCase):
 
     def test_decode(self):
         self.assertEqual(fido2.decode('a163666f6f820102'), {'foo': [1, 2]})
+
+    def test_origin_https(self):
+        for debug, domain, value, expected in [
+            (False, 'example.com', 'https://example.com', True),
+            (False, 'example.com', 'http://example.com', False),
+            (False, 'example.com', 'http://localhost:8000', False),
+            (False, 'localhost', 'http://localhost:8000', False),
+            (True, 'localhost', 'https://example.com', False),
+            (True, 'localhost', 'http://localhost:8000', True),
+            (True, 'localhost', 'http://127.0.0.1', False),
+            (True, 'localhost', 'http://foo.localhost', False),
+            (True, '127.0.0.1', 'http://127.0.0.1', True),
+            (True, 'foo.localhost', 'http://foo.localhost', True),
+            (True, 'example.com', 'http://example.com', False),
+        ]:
+            with self.subTest(debug=debug, domain=domain, value=value):
+                with self.settings(DEBUG=debug, MFA_DOMAIN=domain):
+                    verify = (
+                        fido2._get_verify_origin_fn(domain)
+                        or _verify_origin_for_rp(domain)
+                    )
+                    self.assertEqual(verify(value), expected)
 
 
 class RecoveryTest(MFATestCase):
