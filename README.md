@@ -34,9 +34,10 @@ pip install django-mfa3
 ## Enforce MFA
 
 Optionally, you can add `'mfa.middleware.MFAEnforceMiddleware'` to `MIDDLEWARE`
-(after `AuthenticationMiddleware`!). It will redirect all authenticated
-requests to `'mfa:list'` as long as the user has no MFAKeys. You can use
-`mfa.decorators.public` to add exceptions.
+(after `AuthenticationMiddleware`!). It will force users to setup two factor
+authentication by redirecting all authenticated requests to `'mfa:list'` as
+long as the user has no MFAKeys. You can use `mfa.decorators.public` to add
+exceptions.
 
 ## Send email on failed login attempt
 
