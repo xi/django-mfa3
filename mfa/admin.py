@@ -5,8 +5,6 @@ from django.urls import reverse
 
 from .models import MFAKey
 
-original_login = admin.AdminSite.login
-
 
 def custom_login(self, request, extra_context=None):
     next_url = (
@@ -19,10 +17,6 @@ def custom_login(self, request, extra_context=None):
 
 def patch_admin():
     setattr(admin.AdminSite, 'login', custom_login)
-
-
-def unpatch_admin():
-    setattr(admin.AdminSite, 'login', original_login)
 
 
 @admin.register(MFAKey)
