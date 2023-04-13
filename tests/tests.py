@@ -312,6 +312,35 @@ class PatchAdminTest(TestCase):
         self.assertEqual(res.url, '/login/?next=/admin/')
 
 
+class ListViewTest(MFATestCase):
+    def test_list_view(self):
+        self.client.force_login(self.user)
+        MFAKey.objects.create(
+            user=self.user,
+            method='recovery',
+            name='recovery',
+            secret=make_password('123456'),
+        )
+        res = self.client.get('/mfa/')
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.content.count(b'<li>'), 1)
+
+
+class DeleteViewTest(MFATestCase):
+    def test_list_view(self):
+        self.client.force_login(self.user)
+        key = MFAKey.objects.create(
+            user=self.user,
+            method='recovery',
+            name='recovery',
+            secret=make_password('123456'),
+        )
+        res = self.client.post(f'/mfa/{key.pk}/delete/')
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, '/mfa/')
+        self.assertEqual(MFAKey.objects.filter(pk=key.pk).count(), 0)
+
+
 class QRCodeTest(TestCase):
     def test_is_svg(self):
         code = get_qrcode('some_data')

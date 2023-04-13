@@ -34,10 +34,10 @@ class MFAFormView(FormView):
             raise Http404 from e
 
     def begin(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def complete(self, code):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
