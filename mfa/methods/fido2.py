@@ -1,3 +1,7 @@
+from typing import Union
+from urllib.parse import urlparse
+
+from django.conf import settings as django_settings
 from fido2 import cbor
 from fido2.server import Fido2Server
 from fido2.utils import websafe_decode
@@ -12,9 +16,34 @@ from .. import settings
 
 name = 'FIDO2'
 
-fido2 = Fido2Server(PublicKeyCredentialRpEntity(
-    id=settings.DOMAIN, name=settings.SITE_TITLE
-))
+
+def _get_verify_origin_fn():
+    """
+    Returns a custom verify_origin function which allows HTTP if using localhost.
+    Why: browsers are allowed to consider localhost as a secure context, which is helpful for development.
+    Setting a custom verify_origin like this is the solution suggested by python-fido2.
+    See https://github.com/Yubico/python-fido2/issues/122
+    """
+
+    def is_localhost(hostname: Union[str,bytes]):
+        return hostname == 'localhost' or hostname.endswith('.localhost')
+
+    # This is the custom verify_origin function
+    def verify_localhost_origin(origin):
+        return is_localhost(urlparse(origin).hostname)
+
+    # This custom function is only helpful if configured to use localhost in development
+    if django_settings.DEBUG and is_localhost(settings.DOMAIN):
+        return verify_localhost_origin
+
+    # If custom function is not needed, fallback to using the python-fido2 default function.
+    return None
+
+
+fido2 = Fido2Server(
+    rp=PublicKeyCredentialRpEntity(id=settings.DOMAIN, name=settings.SITE_TITLE),
+    verify_origin=_get_verify_origin_fn(),
+)
 
 
 def encode(data):
