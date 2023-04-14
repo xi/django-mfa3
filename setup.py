@@ -11,7 +11,7 @@ setup(
     author_email='tobias.bengfort@posteo.de',
     version='0.10.0',
     license='MIT',
-    packages=find_packages(exclude=['tests']),
+    packages=['mfa'],
     include_package_data=True,
     install_requires=[
         'pyotp',
