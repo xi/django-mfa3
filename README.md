@@ -50,7 +50,7 @@ send a warning to affected users under the following conditions:
 -   You need to provide some templates
     -   `mfa/login_failed_subject.txt`: optional, a default is included
     -   `mfa/login_failed_email.txt`: required, an example is included in the
-        [tests](/tests/templates/mfa/login_failed_email.txt)
+        [tests](https://github.com/xi/django-mfa3/blob/main/tests/templates/mfa/login_failed_email.txt)
     -   `mfa/login_failed_email.html`: optional
 
 All templates have access to the following context data: `email`, `domain`,
