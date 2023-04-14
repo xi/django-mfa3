@@ -62,6 +62,7 @@ def register_begin(user):
             'displayName': user.get_full_name(),
         },
         get_credentials(user),
+        user_verification=settings.FIDO2_USER_VERIFICATION,
     )
     return encode(registration_data), state
 
@@ -78,7 +79,10 @@ def register_complete(state, request_data):
 
 def authenticate_begin(user):
     credentials = get_credentials(user)
-    auth_data, state = fido2.authenticate_begin(credentials)
+    auth_data, state = fido2.authenticate_begin(
+        credentials,
+        user_verification=settings.FIDO2_USER_VERIFICATION,
+    )
     return encode(auth_data), state
 
 
