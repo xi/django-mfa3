@@ -17,7 +17,7 @@ setup(
         'pyotp',
         'fido2>=1.0.0',
         # https://github.com/lincolnloop/python-qrcode/issues/317
-        'qrcode>=7.1,<7.4',
+        'qrcode>=7.1,<7.5',
         'django>=3.2',
     ],
     classifiers=[
