@@ -1,3 +1,13 @@
+0.11.0 (2023-04-14)
+-------------------
+
+-   Add setting `MFA_FIDO2_USER_VERIFICATION`
+-   Allow to use FIDO2 on localhost without HTTPS if DEBUG is True (thanks to
+    humphrey)
+-   Avoid autocompletion in the code field
+-   Fix minimum supported django version (3.2) in the package
+
+
 0.10.0 (2023-03-19)
 -------------------
 
