@@ -26,11 +26,11 @@ pip install django-mfa3
     can be circumvented. The admin login will automatically be patched to
     redirect to the regular login.)
 3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`
-3.  Optionally set `MFA_TOTP_VALID_WINDOW = 2` to increase how long a user has to enter their TOTP. For example, a value of 2 extends the validity to 60 seconds (2 x 30 sec counter ticks) before and after the current code.
-4.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
-5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own
-6.  FIDO2 requires client side code. You can either implement it yourself or use the included fido2.js (in which case you will have to provide the third party library [cbor-js](https://www.npmjs.com/package/cbor-js)).
-7.  Somewhere in your app, add a link to `'mfa:list'`
+4.  Optionally set `MFA_TOTP_VALID_WINDOW = 1` to allow an OPT, that is generated at the end of a [time-step window](https://www.rfc-editor.org/rfc/rfc6238#section-5.2) but validated within the next window, to be accepted.
+5.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
+6.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own
+7.  FIDO2 requires client side code. You can either implement it yourself or use the included fido2.js (in which case you will have to provide the third party library [cbor-js](https://www.npmjs.com/package/cbor-js)).
+8.  Somewhere in your app, add a link to `'mfa:list'`
 
 ## Enforce MFA
 
