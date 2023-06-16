@@ -30,3 +30,16 @@ jobs:
       run: |
         coverage run -m tests.manage test
         coverage report
+  publish:
+    needs: [lint, test]
+    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+    - name: build
+      run: python3 setup.py bdist_wheel sdist
+    - name: publish
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
