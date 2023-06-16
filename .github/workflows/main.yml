@@ -3,8 +3,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
     - run: pip install ruff
     - name: linters
       run: |
@@ -21,8 +21,8 @@ jobs:
           - python: '3.11'
             django: '4.2'
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python }}
     - run: pip install . coverage tomli "django==${{ matrix.django }}"
