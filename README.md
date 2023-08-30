@@ -25,7 +25,8 @@ pip install django-mfa3
     remove any other login routes, otherwise the multi factor authentication
     can be circumvented. The admin login will automatically be patched to
     redirect to the regular login.)
-3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`
+3.  Set `MFA_DOMAIN = 'example.com'` and `MFA_SITE_TITLE = 'My site'`. See
+    `settings.py` for a full list of settings.
 4.  Register URLs: `path('mfa/', include('mfa.urls', namespace='mfa')`
 5.  The included templates are just examples, so you should [replace them](https://docs.djangoproject.com/en/stable/howto/overriding-templates/) with your own
 6.  FIDO2 requires client side code. You can either implement it yourself or use the included fido2.js (in which case you will have to provide the third party library [cbor-js](https://www.npmjs.com/package/cbor-js)).
