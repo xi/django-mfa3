@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 target-version = "py37"
 exclude = ["migrations"]
 select = ["E", "F", "W", "C9", "I", "Q", "UP", "RUF"]
+ignore = ["RUF012"]
 
 [tool.ruff.flake8-quotes]
 inline-quotes = "single"
