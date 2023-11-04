@@ -37,8 +37,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v4
+    - run: pip install build
     - name: build
-      run: python3 setup.py bdist_wheel sdist
+      run: python3 -m build
     - name: publish
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
