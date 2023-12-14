@@ -35,24 +35,34 @@ class LoginView(DjangoLoginView):
         if not user.mfakey_set.exists():
             return self.no_key_exists(form)
 
-        self.request.session['mfa_user'] = {
+        self.request.mfa_session['mfa_user'] = {
             'pk': user.pk,
             'backend': user.backend,
         }
-        self.request.session['mfa_success_url'] = self.get_success_url()
+        self.request.mfa_session['mfa_success_url'] = self.get_success_url()
         for method in settings.METHODS:
             if user.mfakey_set.filter(method=method).exists():
                 return redirect('mfa:auth', method)
 
 
-class MFAListView(LoginRequiredMixin, ListView):
+class MFAFilteredDispatcher(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        elif not request.mfa_session.get("mfa_authenticated") and request.user.mfakey_set.exists():
+            # otherwise the user without 2fa cannot create new one.
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class MFAListView(MFAFilteredDispatcher, ListView):
     model = MFAKey
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
 
-class MFADeleteView(LoginRequiredMixin, DeleteView):
+class MFADeleteView(MFAFilteredDispatcher, DeleteView):
     model = MFAKey
 
     def get_queryset(self):
@@ -66,16 +76,23 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
     form_class = MFACreateForm
 
     def get_template_names(self):
-        return 'mfa/create_%s.html' % self.method.name
+        return f'mfa/create_{self.method.name}.html'
 
     def get_success_url(self):
         return reverse('mfa:list')
 
     def begin(self):
-        return self.method.register_begin(self.request.user)
-
+        # the user can create new 2fa only if he doesn't have no 2fa or if it was already authenticated with 2fa
+        if not self.request.user.mfakey_set.exists() or self.request.mfa_session.get("mfa_authenticated"):
+            return self.method.register_begin(self.request.user)
+        else:
+            return self.handle_no_permission()
+        
     def complete(self, code):
-        return self.method.register_complete(self.challenge[1], code)
+        mfa_completed = self.method.register_complete(self.challenge[1], code)
+        if mfa_completed:
+            self.request.mfa_session["mfa_authenticated"] = True
+        return mfa_completed
 
     def form_valid(self, form):
         MFAKey.objects.create(
@@ -91,11 +108,14 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
 class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     form_class = MFAAuthForm
 
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_template_names(self):
-        return 'mfa/auth_%s.html' % self.method.name
+        return f'mfa/auth_{self.method.name}.html'
 
     def get_success_url(self):
-        success_url = self.request.session.pop('mfa_success_url')
+        success_url = self.request.mfa_session.pop('mfa_success_url')
         if self.method.name == 'recovery':
             return reverse('mfa:list')
         else:
@@ -104,7 +124,7 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     @cached_property
     def user(self):
         try:
-            user_data = self.request.session['mfa_user']
+            user_data = self.request.mfa_session['mfa_user']
         except KeyError as e:
             raise Http404 from e
         User = get_user_model()
@@ -113,12 +133,17 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
         return user
 
     def begin(self):
+
         return self.method.authenticate_begin(self.user)
 
     def complete(self, code):
-        return self.method.authenticate_complete(
+        mfa_auth = self.method.authenticate_complete(
             self.challenge[1], self.user, code,
         )
+        self.request.mfa_session["mfa_authenticated"] = True
+        self.request.mfa_session.save()
+        return mfa_auth
+        
 
     def form_invalid(self, form):
         user_login_failed.send(
@@ -126,10 +151,11 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
             credentials={'username': self.user.get_username()},
             request=self.request,
         )
+        self.request.mfa_session["mfa_authenticated"] = False
         send_mail(self.user, self.method)
         return super().form_invalid(form)
 
     def form_valid(self, form):
         login(self.request, self.user)
-        del self.request.session['mfa_user']
+        del self.request.mfa_session['mfa_user']
         return super().form_valid(form)
