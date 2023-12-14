@@ -50,7 +50,11 @@ class MFAFilteredDispatcher(LoginRequiredMixin):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
         elif not request.mfa_session.get("mfa_authenticated") and request.user.mfakey_set.exists():
-            # otherwise the user without 2fa cannot create new one.
+            # the user must be authenticated with a 2fa to access to this resource OR
+            # he didn't have configured yet a new 2fa
+            #
+            # this prevents evasion attacks where an adversary being logged in without 2fa
+            # is able to create a 2fa and/or delete a preexisting 2fa
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
@@ -82,7 +86,7 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return reverse('mfa:list')
 
     def begin(self):
-        # the user can create new 2fa only if he doesn't have no 2fa or if it was already authenticated with 2fa
+        # the user can create new 2fa only if he doesn't have already configured a 2fa or if it is authenticated with 2fa
         if not self.request.user.mfakey_set.exists() or self.request.mfa_session.get("mfa_authenticated"):
             return self.method.register_begin(self.request.user)
         else:
@@ -133,7 +137,6 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
         return user
 
     def begin(self):
-
         return self.method.authenticate_begin(self.user)
 
     def complete(self, code):
@@ -141,7 +144,6 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
             self.challenge[1], self.user, code,
         )
         self.request.mfa_session["mfa_authenticated"] = True
-        self.request.mfa_session.save()
         return mfa_auth
         
 

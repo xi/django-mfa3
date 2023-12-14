@@ -10,10 +10,6 @@ from django.utils.http import http_date
 from django.contrib.sessions.backends.base import UpdateError
 from django.contrib.sessions.middleware import SessionMiddleware
 
-from django import VERSION
-django_version = float("{}.{}".format(*VERSION[:2]))
-SAMESITE_NONE = None if django_version < 3.1 else "None"
-
 
 class MFAEnforceMiddleware(MiddlewareMixin):
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -51,7 +47,7 @@ class MfaSessionMiddleware(SessionMiddleware):
                 self.cookie_name,
                 path=settings.SESSION_COOKIE_PATH,
                 domain=settings.SESSION_COOKIE_DOMAIN,
-                samesite=SAMESITE_NONE,
+                samesite=settings.SESSION_COOKIE_SAMESITE,
             )
             patch_vary_headers(response, ("Cookie",))
         else:
@@ -86,7 +82,6 @@ class MfaSessionMiddleware(SessionMiddleware):
                         path=settings.SESSION_COOKIE_PATH,
                         secure=settings.SESSION_COOKIE_SECURE or None,
                         httponly=settings.SESSION_COOKIE_HTTPONLY or None,
-                        samesite=SAMESITE_NONE,
+                        samesite=settings.SESSION_COOKIE_SAMESITE,
                     )
         return response
-
