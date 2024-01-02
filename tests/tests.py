@@ -314,29 +314,62 @@ class PatchAdminTest(TestCase):
 
 class ListViewTest(MFATestCase):
     def test_list_view(self):
-        self.client.force_login(self.user)
+        MFAKey.objects.create(
+            user=self.user,
+            method='FIDO2',
+            name='test',
+            secret='mock',
+        )
         MFAKey.objects.create(
             user=self.user,
             method='recovery',
             name='recovery',
             secret=make_password('123456'),
         )
+
+        res = self.login()
+        self.assertEqual(res.status_code, 302)
+
+        res = self.client.get('/mfa/auth/recovery/')
+        self.assertEqual(res.status_code, 200)
+
+        # user must be logged using MFA to list 2fas
+        login_res = self.client.post('/mfa/auth/recovery/', {'code': '123456'})
+        self.assertEqual(login_res.status_code, 302)
+
         res = self.client.get('/mfa/')
         self.assertEqual(res.status_code, 200)
+        
         self.assertEqual(res.content.count(b'<li>'), 1)
 
 
 class DeleteViewTest(MFATestCase):
-    def test_list_view(self):
-        self.client.force_login(self.user)
+    def test_delete_view(self):
         key = MFAKey.objects.create(
+            user=self.user,
+            method='FIDO2',
+            name='test',
+            secret='mock',
+        )
+        r_key = MFAKey.objects.create(
             user=self.user,
             method='recovery',
             name='recovery',
             secret=make_password('123456'),
         )
+        res = self.login()
+        self.assertEqual(res.status_code, 302)
+
+        res = self.client.get('/mfa/auth/recovery/')
+        self.assertEqual(res.status_code, 200)
+
+        # user must be logged using MFA to delete  2fa
+        login_res = self.client.post('/mfa/auth/recovery/', {'code': '123456'})
+        self.assertEqual(login_res.status_code, 302)
+
         res = self.client.post(f'/mfa/{key.pk}/delete/')
         self.assertEqual(res.status_code, 302)
+
         self.assertEqual(res.url, '/mfa/')
         self.assertEqual(MFAKey.objects.filter(pk=key.pk).count(), 0)
 
