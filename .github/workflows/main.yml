@@ -17,8 +17,6 @@ jobs:
           - python: '3.8'
             django: '3.2'
           - python: '3.12'
-            django: '4.1'
-          - python: '3.12'
             django: '4.2'
     steps:
     - uses: actions/checkout@v4
