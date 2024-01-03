@@ -18,6 +18,8 @@ jobs:
             django: '3.2'
           - python: '3.12'
             django: '4.2'
+          - python: '3.12'
+            django: '5.0'
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v4
