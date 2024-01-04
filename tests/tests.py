@@ -282,7 +282,7 @@ class MFAEnforceMiddlewareTest(MFATestCase):
 
     def test_public(self):
         self.login()
-        res = self.client.get('/logout/')
+        res = self.client.post('/logout/')
         self.assertEqual(res.status_code, 302)
         self.assertEqual(res.url, '/')
 
