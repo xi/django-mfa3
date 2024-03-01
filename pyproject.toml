@@ -46,13 +46,15 @@ mfa = [
 
 [tool.ruff]
 exclude = ["migrations"]
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "C9", "I", "Q", "UP", "RUF"]
 ignore = ["RUF012"]
 
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = true
 
 [tool.coverage.run]
