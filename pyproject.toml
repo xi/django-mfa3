@@ -45,7 +45,6 @@ mfa = [
 ]
 
 [tool.ruff]
-target-version = "py38"
 exclude = ["migrations"]
 select = ["E", "F", "W", "C9", "I", "Q", "UP", "RUF"]
 ignore = ["RUF012"]
