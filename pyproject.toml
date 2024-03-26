@@ -39,6 +39,7 @@ include = ["mfa*"]
 [tool.setuptools.package-data]
 mfa = [
     "templates/**/*.html",
+    "templates/**/*.txt",
     "static/**/*.js",
     "locale/**/*.po",
     "locale/**/*.mo",
