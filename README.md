@@ -20,7 +20,7 @@ pip install django-mfa3
 
 ## Usage
 
-1.  Add `'mfa'` to `INSTALLED_APPS`
+1.  Add `'mfa'` to `INSTALLED_APPS` and add `mfa.middleware.MfaSessionMiddleware` in your `settings.MIDDLEWARE` configuration.
 2.  Use `mfa.views.LoginView` instead of the regular login view. (Be sure to
     remove any other login routes, otherwise the multi factor authentication
     can be circumvented. The admin login will automatically be patched to
