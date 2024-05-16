@@ -1,3 +1,20 @@
+0.12.1 (2024-03-26)
+-------------------
+
+-   Fix failed package build
+
+
+0.12.0 (2024-03-26)
+-------------------
+
+-   Set ID field independent of `DEFAULT_AUTO_FIELD`
+-   Add support for async in `MFAEnforceMiddleware`
+-   Fix: include `login_failed_subject.txt` in package
+-   Add support for django 5.0, drop support for django 4.1
+-   Add support for python 3.12, drop support for python 3.7
+-   Replace setup.py by pyproject.toml
+
+
 0.11.0 (2023-04-14)
 -------------------
 

@@ -3,6 +3,7 @@ from django.db import models
 
 
 class MFAKey(models.Model):
+    id = models.BigAutoField(primary_key=True, serialize=False, verbose_name='ID')
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )

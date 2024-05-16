@@ -345,6 +345,7 @@ class ListViewTest(MFATestCase):
 
 class DeleteViewTest(MFATestCase):
     def test_delete_view(self):
+        self.client.force_login(self.user)
         key = MFAKey.objects.create(
             user=self.user,
             method='FIDO2',

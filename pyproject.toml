@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-mfa3"
-version = "0.11.0"
+version = "0.12.1"
 description = "multi factor authentication for django"
 readme = "README.md"
 license = {text = "MIT"}
@@ -33,8 +33,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/xi/django-mfa3"
 
-[tool.setuptools]
-packages = ["mfa"]
+[tool.setuptools.packages.find]
+include = ["mfa*"]
 
 [tool.setuptools.package-data]
 mfa = [
@@ -45,15 +45,16 @@ mfa = [
 ]
 
 [tool.ruff]
-target-version = "py38"
 exclude = ["migrations"]
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "C9", "I", "Q", "UP", "RUF"]
 ignore = ["RUF012"]
 
-[tool.ruff.flake8-quotes]
+[tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = true
 
 [tool.coverage.run]
