@@ -4,7 +4,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
     - run: pip install ruff
     - name: linters
       run: |
@@ -22,7 +22,7 @@ jobs:
             django: '5.0'
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
     - run: pip install . coverage tomli "django==${{ matrix.django }}"
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
     - run: pip install build
     - name: build
       run: python3 -m build
