@@ -66,7 +66,7 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
     form_class = MFACreateForm
 
     def get_template_names(self):
-        return 'mfa/create_%s.html' % self.method.name
+        return f'mfa/create_{self.method.name}.html'
 
     def get_success_url(self):
         return reverse('mfa:list')
@@ -92,7 +92,7 @@ class MFAAuthView(StrongholdPublicMixin, MFAFormView):
     form_class = MFAAuthForm
 
     def get_template_names(self):
-        return 'mfa/auth_%s.html' % self.method.name
+        return f'mfa/auth_{self.method.name}.html'
 
     def get_success_url(self):
         success_url = self.request.session.pop('mfa_success_url')
