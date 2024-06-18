@@ -8,7 +8,7 @@ jobs:
     - run: pip install ruff
     - name: linters
       run: |
-        ruff mfa tests
+        ruff check mfa tests
   test:
     runs-on: ubuntu-latest
     strategy:
