@@ -3,9 +3,11 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import redirect_to_login
 from django.urls import reverse
 
+from .decorators import login_not_required
 from .models import MFAKey
 
 
+@login_not_required
 def custom_login(self, request, extra_context=None):
     next_url = (
         request.GET.get(REDIRECT_FIELD_NAME)

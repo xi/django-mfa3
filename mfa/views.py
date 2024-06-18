@@ -15,17 +15,13 @@ from django.views.generic import DeleteView
 from django.views.generic import ListView
 
 from . import settings
+from .decorators import login_not_required
+from .decorators import stronghold_login_not_required
 from .forms import MFAAuthForm
 from .forms import MFACreateForm
 from .mail import send_mail
 from .mixins import MFAFormView
 from .models import MFAKey
-
-try:
-    from stronghold.decorators import public as stronghold_public
-except ImportError:
-    def stronghold_public(view_func):
-        return view_func
 
 
 class LoginView(DjangoLoginView):
@@ -90,7 +86,8 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return super().form_valid(form)
 
 
-@method_decorator(stronghold_public, name='dispatch')
+@method_decorator(login_not_required, name='dispatch')
+@method_decorator(stronghold_login_not_required, name='dispatch')
 class MFAAuthView(MFAFormView):
     form_class = MFAAuthForm
 
