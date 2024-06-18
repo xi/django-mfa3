@@ -19,7 +19,7 @@ jobs:
           - python: '3.12'
             django: '4.2'
           - python: '3.12'
-            django: '5.0'
+            django: '5.1a1'
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
