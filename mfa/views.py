@@ -8,6 +8,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
@@ -21,9 +22,10 @@ from .mixins import MFAFormView
 from .models import MFAKey
 
 try:
-    from stronghold.views import StrongholdPublicMixin
+    from stronghold.decorators import public as stronghold_public
 except ImportError:
-    from .mixins import DummyMixin as StrongholdPublicMixin
+    def stronghold_public(view_func):
+        return view_func
 
 
 class LoginView(DjangoLoginView):
@@ -88,7 +90,8 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return super().form_valid(form)
 
 
-class MFAAuthView(StrongholdPublicMixin, MFAFormView):
+@method_decorator(stronghold_public, name='dispatch')
+class MFAAuthView(MFAFormView):
     form_class = MFAAuthForm
 
     def get_template_names(self):

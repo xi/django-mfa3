@@ -10,10 +10,6 @@ from .methods import recovery
 from .methods import totp
 
 
-class DummyMixin:
-    pass
-
-
 class MFAFormView(FormView):
     @property
     def method(self):
