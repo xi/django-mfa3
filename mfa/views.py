@@ -8,22 +8,20 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
 from django.views.generic import ListView
 
 from . import settings
+from .decorators import login_not_required
+from .decorators import stronghold_login_not_required
 from .forms import MFAAuthForm
 from .forms import MFACreateForm
 from .mail import send_mail
 from .mixins import MFAFormView, MFASessionDispatcher
 from .models import MFAKey
-
-try:
-    from stronghold.views import StrongholdPublicMixin
-except ImportError:
-    from .mixins import DummyMixin as StrongholdPublicMixin
 
 
 class LoginView(DjangoLoginView):
@@ -112,7 +110,9 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return super().form_valid(form)
 
 
-class MFAAuthView(StrongholdPublicMixin, MFAFormView):
+@method_decorator(login_not_required, name='dispatch')
+@method_decorator(stronghold_login_not_required, name='dispatch')
+class MFAAuthView(MFAFormView):
     form_class = MFAAuthForm
 
     def dispatch(self, request, *args, **kwargs):

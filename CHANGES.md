@@ -1,3 +1,9 @@
+0.13.0 (2024-06-18)
+-------------------
+
+-   Add suport for `LoginRequiredMiddleware` from django 5.1
+
+
 0.12.1 (2024-03-26)
 -------------------
 

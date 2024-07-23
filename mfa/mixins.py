@@ -22,7 +22,6 @@ class MFASessionDispatcher:
 
 
 class MFAFormView(FormView, MFASessionDispatcher):
-
     @property
     def method(self):
         if self.kwargs['method'] in settings.METHODS:

@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import django
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -20,6 +22,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'mfa.middleware.MFAEnforceMiddleware',
 ]
+
+if django.VERSION >= (5, 1):
+    MIDDLEWARE.append('django.contrib.auth.middleware.LoginRequiredMiddleware')
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
