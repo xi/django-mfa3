@@ -1,5 +1,18 @@
-<p>Are you sure you want to delete the key {{ object.name }}?</p>
+{% extends "mfa/base.html" %}
+{% load i18n static %}
+
+{% block content_subtitle %}
+<p>
+    Are you sure you want to delete the key {{ object.name }}?
+</p>
+{% endblock %}
+
+{% block form %}
 <form method="POST">
     {% csrf_token %}
-    <button>Confirm</button>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Confirm' %}">
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
 </form>
+{% endblock %}

@@ -1,24 +1,38 @@
+{% extends "mfa/base.html" %}
+{% load i18n static %}
+
+{% block content_subtitle %}
+<p>
+    A recovery code can be used when you lose access to your other two-factor
+    authentication options. Each recovery code can only be used once.
+</p>
+<p>
+    Make sure to store it in a safe place! If you lose your login keys and don't
+    have the recovery codes you will lose access to your account.
+</p>
+{% endblock %}
+
+{% block form %}
 {% load static mfa %}
-
-<p>A recovery code can be used when you lose access to your other two-factor authentication options. Each recovery code can only be used once.</p>
-<p>Make sure to store it in a safe place! If you lose your login keys and don’t have the recovery codes you will lose access to your account.</p>
-
 <form method="POST">
     {% csrf_token %}
-    {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
-    <label>
+    <div class="form-row">
+        {{ form.name.errors }}
         {{ form.name.label }}
         {{ form.name }}
-    </label>
-    <label>
+    </div>
+    <div class="form-row">
+        {{ form.code.errors }}
         {{ form.code.label }}
         <input name="code" value="{{ mfa_data.code }}" readonly>
-    </label>
-    <label>
+    </div>
+    <div class="form-row">
         <input type="checkbox" required>
         I have safely stored the code
-    </label>
-    <button>Create</button>
+    </div>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Create' %}">
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
 </form>
+{% endblock %}

@@ -1,16 +1,32 @@
-<h1>Two-factor authentication</h1>
-<p>Open your TOTP app to get an authentication code.</p>
+{% extends "mfa/base.html" %}
+{% load i18n static %}
 
+{% block content_title %}
+<h1>Two-factor authentication</h1>
+{% endblock %}
+
+{% block content_subtitle %}
+<p>
+    Open your TOTP app to get an authentication code
+    {% for method in methods %}
+    {% if method != 'TOTP' %}
+    or <a href="{% url 'mfa:auth' method %}">use {{method}} instead</a>
+    {% endif %}
+    {% endfor %}.
+</p>
+{% endblock %}
+
+{% block form %}
 <form method="POST">
     {% csrf_token %}
-    {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
-    <label>
-        {{ form.code.label }}
-        {{ form.code }}
-    </label>
-    <button>Verify</button>
-    <a href="{% url 'mfa:auth' 'FIDO2' %}">Use FIDO2 instead</a>
-    <a href="{% url 'mfa:auth' 'recovery' %}">Use recovery code instead</a>
+    <div class="form-row">
+        {{ form.code.errors }}
+        <h2>{{ form.code.label }}:</h2>
+        <p>{{ form.code }}</p>
+    </div>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Verify' %}">
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
 </form>
+{% endblock %}

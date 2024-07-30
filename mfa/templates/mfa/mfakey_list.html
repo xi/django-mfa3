@@ -1,23 +1,44 @@
-<h1> {% if object_list %}Login keys configured{% else %}No login keys configured{% endif %}</h1>
-<p>Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to log in.</p>
+{% extends "mfa/base.html" %}
+{% load i18n static %}
 
+{% block content_title %}
+<h1>{% if object_list %}Login keys configured{% else %}No login keys configured{% endif %}</h1>
+{% endblock %}
+
+{% block content_subtitle %}
+<p>
+    Two-factor authentication adds an additional layer of security to your account
+    by requiring more than just a password to log in.
+</p>
+<p>
+    This can be done with apps like google authenticator or microsoft authenticator.
+</p>
 {% if object_list|length == 1 %}
-    <p>
-        <strong>WARNING</strong>:
-        You have registered only a single key. If you lose access to that key you won't be able log into your account again.
-        <a href="{% url 'mfa:create' 'recovery' %}">Create recovery code</a>
-    </p>
+<p>
+    <strong>WARNING</strong>:
+    You have registered only a single key. If you lose access to that key you
+    won't be able log into your account again.
+</p>
 {% endif %}
-
 <ul>
-    {% for key in object_list %}
-        <li>
-            {{ key.name }} ({{ key.method }})
-            <a href="{% url 'mfa:delete' key.id %}">Delete</a>
-        </li>
-    {% endfor %}
+{% for key in object_list %}
+    <li>
+        {{ key.name }} ({{ key.method }})
+        <a href="{% url 'mfa:delete' key.id %}">Delete</a>
+    </li>
+{% endfor %}
 </ul>
+{% endblock %}
 
-<a href="{% url 'mfa:create' 'TOTP' %}">Create TOTP key</a>
-<a href="{% url 'mfa:create' 'FIDO2' %}">Create FIDO2 key</a>
-<a href="{% url 'mfa:create' 'recovery' %}">Create recovery code</a>
+{% block form %}
+<h1>
+    {% if methods|length == 1 %}C{% else %}Select a type to c{% endif %}reate a key:
+</h1>
+<div style="text-align: center;">
+{% for method in methods %}
+    <a class="button" href="{% url 'mfa:create' method %}" style="padding: 5px 10px; margin: 2px;">
+    {{ method }}
+    </a>
+{% endfor %}
+</div>
+{% endblock %}

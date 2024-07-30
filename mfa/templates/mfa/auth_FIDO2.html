@@ -1,18 +1,33 @@
-{% load static %}
+{% extends "mfa/base.html" %}
+{% load i18n static %}
 
+{% block content_title %}
 <h1>Two-factor authentication</h1>
-<p>When you are ready to authenticate with FIDO2, press the button below.</p>
+{% endblock %}
+
+{% block content_subtitle %}
+<p>
+    When you are ready to authenticate with FIDO2,
+    press the button below
+    {% for method in methods %}
+    {% if method != 'FIDO2' %}
+    or <a href="{% url 'mfa:auth' method %}">use {{method}} instead</a>
+    {% endif %}
+    {% endfor %}.
+</p>
+{% endblock %}
+
+{% block form %}
+{% load static %}
+<script src="{% static 'cbor-js/cbor.js' %}"></script>
+<script src="{% static 'mfa/fido2.js' %}"></script>
 
 <form data-fido2-auth="{{ mfa_data }}" method="POST">
     {% csrf_token %}
-    {% for error in form.errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
     {{ form.code.as_hidden }}
-    <button autofocus>Verify</button>
-    <a href="{% url 'mfa:auth' 'TOTP' %}">Use TOTP instead</a>
-    <a href="{% url 'mfa:auth' 'recovery' %}">Use recovery code instead</a>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Verify' %}" autofocus>
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
 </form>
-
-<script src="{% static 'cbor-js/cbor.js' %}"></script>
-<script src="{% static 'mfa/fido2.js' %}"></script>
+{% endblock %}

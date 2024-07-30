@@ -49,6 +49,11 @@ class MFAListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs: settings.DOMAIN):
+        context = super().get_context_data(**kwargs)
+        context['methods'] = settings.METHODS
+        return context
+
 
 class MFADeleteView(LoginRequiredMixin, DeleteView):
     model = MFAKey
@@ -100,6 +105,11 @@ class MFAAuthView(MFAFormView):
             return reverse('mfa:list')
         else:
             return success_url
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['methods'] = settings.METHODS
+        return context
 
     @cached_property
     def user(self):

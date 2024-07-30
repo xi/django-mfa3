@@ -1,22 +1,33 @@
+{% extends "mfa/base.html" %}
+{% load i18n static %}
+
+{% block content_subtitle %}
+<p>
+    Scan the code with your TOTP app and enter a valid code to finish registration.
+</p>
+{% endblock %}
+
+{% block form %}
 {% load static mfa %}
-
-<p>Scan the code with your TOTP app and enter a valid code to finish registration.</p>
-
-{{ mfa_data.url|qrcode }}
-{{ mfa_data.secret }}
-
+<div style="margin-bottom: 10px;">
+    <div style="color: black; background-color: white; width: min-content; margin: auto;">{{ mfa_data.url|qrcode }}</div>
+    <div style="width: min-content; margin: 12px auto;">{{ mfa_data.secret }}</div>
+</div>
 <form method="POST">
     {% csrf_token %}
-    {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
-    {% endfor %}
-    <label>
-        {{ form.name.label }}
-        {{ form.name }}
-    </label>
-    <label>
-        {{ form.code.label }}
-        {{ form.code }}
-    </label>
-    <button>Create</button>
+    <div class="form-row">
+        {{ form.name.errors }}
+        {{ form.name.label }} {{ form.name }}
+    </div>
+    <div class="form-row">
+        {{ form.code.errors }}
+        {{ form.code.label }} {{ form.code }}
+        </div>
+    <div class="submit-row">
+        <input type="submit" value="{% translate 'Create' %}">
+        <input type="hidden" name="next" value="{{ next }}">
+    </div>
 </form>
+
+</div>
+{% endblock %}
