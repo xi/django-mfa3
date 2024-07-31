@@ -30,7 +30,12 @@ def send_mail(user, method):
     except TemplateDoesNotExist:
         return 0
 
-    message = EmailMultiAlternatives(subject, body, to=[user_email])
+    message = EmailMultiAlternatives(
+        subject,
+        body,
+        to=[user_email],
+        headers={'Auto-Submitted': 'auto-generated'},
+    )
 
     try:
         html_body = loader.render_to_string(HTML_TEMPLATE, context)
