@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button>Login</button>
+</form>
