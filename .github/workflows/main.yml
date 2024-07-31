@@ -28,7 +28,7 @@ jobs:
     - run: pip install . coverage tomli "django==${{ matrix.django }}"
     - name: tests
       run: |
-        coverage run -m tests.manage test
+        coverage run -m django test --settings tests.settings
         coverage report
   publish:
     needs: [lint, test]
