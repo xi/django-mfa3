@@ -10,7 +10,18 @@ from .methods import recovery
 from .methods import totp
 
 
-class MFAFormView(FormView):
+class DummyMixin:
+    pass
+
+
+class MFASessionDispatcher:
+
+    def _get_mfa_session(self):
+        self.mfa_session = getattr(self.request, "mfa_session", self.request.session)
+        return self.mfa_session
+
+
+class MFAFormView(FormView, MFASessionDispatcher):
     @property
     def method(self):
         if self.kwargs['method'] in settings.METHODS:
@@ -25,7 +36,7 @@ class MFAFormView(FormView):
     @property
     def challenge(self):
         try:
-            return self.request.session['mfa_challenge']
+            return self.mfa_session['mfa_challenge']
         except KeyError as e:
             raise Http404 from e
 
@@ -38,13 +49,14 @@ class MFAFormView(FormView):
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
     def dispatch(self, *args, **kwargs):
+        self._get_mfa_session()
         return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if 'mfa_data' not in context:
             data, state = self.begin()
-            self.request.session['mfa_challenge'] = (data, state)
+            self.mfa_session['mfa_challenge'] = (data, state)
             context['mfa_data'] = data
         return context
 
@@ -60,5 +72,5 @@ class MFAFormView(FormView):
         ))
 
     def form_valid(self, form):
-        del self.request.session['mfa_challenge']
+        del self.mfa_session['mfa_challenge']
         return super().form_valid(form)
