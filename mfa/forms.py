@@ -8,7 +8,7 @@ class MFABaseForm(forms.Form):
     def __init__(self, validate_code=None, **kwargs):
         self.validate_code = validate_code
         super().__init__(**kwargs)
-        self.fields['code'].widget.attrs.update({'autocomplete': 'off'})
+        self.fields['code'].widget.attrs.update({'autocomplete': 'one-time-code'})
 
     def clean(self):
         cleaned_data = super().clean()
