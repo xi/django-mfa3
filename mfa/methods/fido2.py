@@ -1,7 +1,3 @@
-from urllib.parse import urlparse
-
-from django.conf import settings as django_settings
-from django.utils.http import is_same_domain
 from fido2 import cbor
 from fido2.server import Fido2Server
 from fido2.utils import websafe_decode
@@ -16,28 +12,8 @@ from .. import settings
 
 name = 'FIDO2'
 
-def _get_verify_origin_fn(domain):
-    """Do not require https on localhost in DEBUG mode.
-
-    See https://github.com/Yubico/python-fido2/issues/122
-    """
-
-    def is_localhost(hostname):
-        allowed_hosts = ['.localhost', '127.0.0.1', '[::1]']
-        return any(is_same_domain(hostname, h) for h in allowed_hosts)
-
-    def verify_localhost_origin(origin):
-        return urlparse(origin).hostname == domain
-
-    if django_settings.DEBUG and is_localhost(domain):
-        return verify_localhost_origin
-    else:
-        return None
-
-
 fido2 = Fido2Server(
     PublicKeyCredentialRpEntity(id=settings.DOMAIN, name=settings.SITE_TITLE),
-    verify_origin=_get_verify_origin_fn(settings.DOMAIN),
 )
 
 

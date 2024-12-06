@@ -194,26 +194,20 @@ class FIDO2Test(MFATestCase):
         self.assertEqual(fido2.decode('a163666f6f820102'), {'foo': [1, 2]})
 
     def test_origin_https(self):
-        for debug, domain, value, expected in [
-            (False, 'example.com', 'https://example.com', True),
-            (False, 'example.com', 'http://example.com', False),
-            (False, 'example.com', 'http://localhost:8000', False),
-            (False, 'localhost', 'http://localhost:8000', False),
-            (True, 'localhost', 'https://example.com', False),
-            (True, 'localhost', 'http://localhost:8000', True),
-            (True, 'localhost', 'http://127.0.0.1', False),
-            (True, 'localhost', 'http://foo.localhost', False),
-            (True, '127.0.0.1', 'http://127.0.0.1', True),
-            (True, 'foo.localhost', 'http://foo.localhost', True),
-            (True, 'example.com', 'http://example.com', False),
+        for domain, value, expected in [
+            ('example.com', 'https://example.com', True),
+            ('example.com', 'http://example.com', False),
+            ('example.com', 'http://localhost:8000', False),
+            ('localhost', 'https://example.com', False),
+            ('localhost', 'http://localhost:8000', True),
+            ('localhost', 'http://127.0.0.1', False),
+            ('localhost', 'http://foo.localhost', True),
+            ('127.0.0.1', 'http://127.0.0.1', False),
+            ('foo.localhost', 'http://foo.localhost', True),
         ]:
-            with self.subTest(debug=debug, domain=domain, value=value):
-                with self.settings(DEBUG=debug, MFA_DOMAIN=domain):
-                    verify = (
-                        fido2._get_verify_origin_fn(domain)
-                        or _verify_origin_for_rp(domain)
-                    )
-                    self.assertEqual(verify(value), expected)
+            with self.subTest(domain=domain, value=value):
+                verify = _verify_origin_for_rp(domain)
+                self.assertEqual(verify(value), expected)
 
 
 class RecoveryTest(MFATestCase):
