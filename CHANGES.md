@@ -1,3 +1,13 @@
+0.14.0 (2024-12-06)
+-------------------
+
+-   Use `autocomplete="one-time-code"` on form inputs
+-   Set `Auto-Submitted` header in emails
+-   Align handling of localhost as a secure context with upstream. Notably,
+    this means that `DEBUG` no longer has any effect and that `127.0.0.1` is no
+    longer treated as a secure context.
+
+
 0.13.0 (2024-06-18)
 -------------------
 
