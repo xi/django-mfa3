@@ -1,3 +1,10 @@
+0.15.0 (2025-01-20)
+-------------------
+
+-   Allow to search by username in admin UI
+-   Change label of the name field to "Name for this key" to avoid confusion
+
+
 0.14.0 (2024-12-06)
 -------------------
 
