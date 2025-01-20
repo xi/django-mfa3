@@ -11,8 +11,8 @@ msgstr "Authentifizierungscode"
 msgid "Validation failed"
 msgstr "Validierung fehlgeschlagen"
 
-msgid "Name"
-msgstr "Name"
+msgid "Name for this key"
+msgstr "Name für diesen Schlüssel"
 
 msgid "Key was created successfully!"
 msgstr "Schlüssel wurde erfolgreich erstellt!"

@@ -28,4 +28,4 @@ class MFAAuthForm(MFABaseForm):
 
 
 class MFACreateForm(MFABaseForm):
-    name = forms.CharField(label=_('Name'), max_length=32)
+    name = forms.CharField(label=_('Name for this key'), max_length=32)
