@@ -23,4 +23,6 @@ def patch_admin():
 
 @admin.register(MFAKey)
 class MFAKeyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'user', 'method']
+    list_display = ['user', 'method', 'name']
+    search_fields = ['user__username', 'name']
+    list_filter = ['method']
