@@ -13,8 +13,8 @@ msgstr "Code d'authentification"
 msgid "Validation failed"
 msgstr "Echec de la validation"
 
-msgid "Name"
-msgstr "Nom"
+msgid "Name for this key"
+msgstr "Nom de cette clé"
 
 #, python-format
 msgid ""
