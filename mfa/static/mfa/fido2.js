@@ -1,29 +1,16 @@
-var encode = function(data) {
-    var buffer = CBOR.encode(data);
-    var arr = new Uint8Array(buffer);
-    return arr.reduce((s, b) => s + b.toString(16).padStart(2, '0'), '');
-};
-
-var decode = function(hex) {
-    var arr = new Uint8Array(hex.length / 2);
-    for (var i = 0; i < arr.length; i += 1) {
-        arr[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
-    }
-    return CBOR.decode(arr.buffer);
-};
+import * as webauthnJSON from 'https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js';
 
 var initCreate = function() {
     var form = document.querySelector('form[data-fido2-create]');
     if (form) {
-        var options = decode(form.dataset.fido2Create);
+        var options = webauthnJSON.parseCreationOptionsFromJSON(
+            JSON.parse(form.dataset.fido2Create)
+        );
         form.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            navigator.credentials.create(options).then(attestation => {
-                this.code.value = encode({
-                    'attestationObject': new Uint8Array(attestation.response.attestationObject),
-                    'clientData': new Uint8Array(attestation.response.clientDataJSON),
-                });
+            webauthnJSON.create(options).then(attestation => {
+                this.code.value = JSON.stringify(attestation);
                 form.submit();
             }).catch(alert);
         });
@@ -33,17 +20,14 @@ var initCreate = function() {
 var initAuth = function() {
     var form = document.querySelector('form[data-fido2-auth]');
     if (form) {
-        var options = decode(form.dataset.fido2Auth);
+        var options = webauthnJSON.parseRequestOptionsFromJSON(
+            JSON.parse(form.dataset.fido2Auth)
+        );
         form.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            navigator.credentials.get(options).then(assertion => {
-                this.code.value = encode({
-                    'credentialId': new Uint8Array(assertion.rawId),
-                    'authenticatorData': new Uint8Array(assertion.response.authenticatorData),
-                    'clientData': new Uint8Array(assertion.response.clientDataJSON),
-                    'signature': new Uint8Array(assertion.response.signature),
-                });
+            webauthnJSON.get(options).then(assertion => {
+                this.code.value = JSON.stringify(assertion);
                 form.submit();
             }).catch(alert);
         });
