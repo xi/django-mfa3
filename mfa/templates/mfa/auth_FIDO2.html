@@ -14,4 +14,5 @@
     <a href="{% url 'mfa:auth' 'recovery' %}">Use recovery code instead</a>
 </form>
 
+<script type="importmap">{"imports": {"webauthn-json": "https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js"}}</script>
 <script src="{% static 'mfa/fido2.js' %}" type="module"></script>
