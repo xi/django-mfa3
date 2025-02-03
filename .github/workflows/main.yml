@@ -15,11 +15,9 @@ jobs:
       matrix:
         include:
           - python: '3.9'
-            django: '3.2'
-          - python: '3.12'
             django: '4.2'
-          - python: '3.12'
-            django: '5.1'
+          - python: '3.13'
+            django: '5.2a1'
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
