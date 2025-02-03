@@ -15,5 +15,5 @@
     <button>Create</button>
 </form>
 
-<script src="{% static 'cbor-js/cbor.js' %}"></script>
-<script src="{% static 'mfa/fido2.js' %}"></script>
+<script type="importmap">{"imports": {"webauthn-json": "https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js"}}</script>
+<script src="{% static 'mfa/fido2.js' %}" type="module"></script>

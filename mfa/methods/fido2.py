@@ -1,30 +1,21 @@
-from fido2 import cbor
+import json
+
 from fido2.features import webauthn_json_mapping
 from fido2.server import Fido2Server
 from fido2.utils import websafe_decode
 from fido2.utils import websafe_encode
-from fido2.webauthn import AttestationObject
 from fido2.webauthn import AttestedCredentialData
-from fido2.webauthn import AuthenticatorData
-from fido2.webauthn import CollectedClientData
 from fido2.webauthn import PublicKeyCredentialRpEntity
+from fido2.webauthn import PublicKeyCredentialUserEntity
 
 from .. import settings
 
 name = 'FIDO2'
 
-webauthn_json_mapping.enabled = False
+webauthn_json_mapping.enabled = True
 fido2 = Fido2Server(
     PublicKeyCredentialRpEntity(id=settings.DOMAIN, name=settings.SITE_TITLE),
 )
-
-
-def encode(data):
-    return cbor.encode(data).hex()
-
-
-def decode(s):
-    return cbor.decode(bytes.fromhex(s))
 
 
 def get_credentials(user):
@@ -34,24 +25,19 @@ def get_credentials(user):
 
 def register_begin(user):
     registration_data, state = fido2.register_begin(
-        {
-            'id': str(user.id).encode('utf-8'),
-            'name': user.get_username(),
-            'displayName': user.get_full_name(),
-        },
+        PublicKeyCredentialUserEntity(
+            id=str(user.id).encode('utf-8'),
+            name=user.get_username(),
+            display_name=user.get_full_name(),
+        ),
         get_credentials(user),
         user_verification=settings.FIDO2_USER_VERIFICATION,
     )
-    return encode(registration_data), state
+    return json.dumps(dict(registration_data)), state
 
 
 def register_complete(state, request_data):
-    data = decode(request_data)
-    auth_data = fido2.register_complete(
-        state,
-        CollectedClientData(data['clientData']),
-        AttestationObject(data['attestationObject']),
-    )
+    auth_data = fido2.register_complete(state, json.loads(request_data))
     return websafe_encode(auth_data.credential_data)
 
 
@@ -61,16 +47,12 @@ def authenticate_begin(user):
         credentials,
         user_verification=settings.FIDO2_USER_VERIFICATION,
     )
-    return encode(auth_data), state
+    return json.dumps(dict(auth_data)), state
 
 
 def authenticate_complete(state, user, request_data):
-    data = decode(request_data)
     fido2.authenticate_complete(
         state,
         get_credentials(user),
-        data['credentialId'],
-        CollectedClientData(data['clientData']),
-        AuthenticatorData(data['authenticatorData']),
-        data['signature'],
+        json.loads(request_data),
     )
