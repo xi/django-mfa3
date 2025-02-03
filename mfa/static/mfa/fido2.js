@@ -1,4 +1,4 @@
-import * as webauthnJSON from 'https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js';
+import * as webauthnJSON from './vendor/webauthn-json.browser-ponyfill.js';
 
 var initCreate = function() {
     var form = document.querySelector('form[data-fido2-create]');
