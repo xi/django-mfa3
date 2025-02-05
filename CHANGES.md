@@ -1,3 +1,10 @@
+0.15.1 (2025-02-05)
+-------------------
+
+-   fido2: fix json mapping deprecation warning
+-   update french translation
+
+
 0.15.0 (2025-01-20)
 -------------------
 

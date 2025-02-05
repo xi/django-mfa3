@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-mfa3"
-version = "0.15.0"
+version = "0.15.1"
 description = "multi factor authentication for django"
 readme = "README.md"
 license = {text = "MIT"}
