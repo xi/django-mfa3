@@ -1,3 +1,10 @@
+0.15.2 (2025-05-21)
+-------------------
+
+-   remove support for fido2 2.x for now
+-   drop support for Django 3.2
+
+
 0.15.1 (2025-02-05)
 -------------------
 
