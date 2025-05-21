@@ -1,3 +1,13 @@
+1.0.0 (2025-05-21)
+------------------
+
+-   drop support for python 3.9
+-   drop support for fido2 1.x
+-   cbor-js is no longer required
+-   the new javascript dependency webauthn-json is included in the package
+-   the `<script>` element that loads fido2.js now needs to use `type="module"`
+
+
 0.15.2 (2025-05-21)
 -------------------
 
