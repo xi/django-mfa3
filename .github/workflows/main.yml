@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - python: '3.9'
+          - python: '3.10'
             django: '4.2'
           - python: '3.13'
             django: '5.2'

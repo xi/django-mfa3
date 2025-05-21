@@ -1,6 +1,5 @@
 import json
 
-from fido2.features import webauthn_json_mapping
 from fido2.server import Fido2Server
 from fido2.utils import websafe_decode
 from fido2.utils import websafe_encode
@@ -12,7 +11,6 @@ from .. import settings
 
 name = 'FIDO2'
 
-webauthn_json_mapping.enabled = True
 fido2 = Fido2Server(
     PublicKeyCredentialRpEntity(id=settings.DOMAIN, name=settings.SITE_TITLE),
 )
