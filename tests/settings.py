@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'mfa',
 ]
 
@@ -63,6 +64,8 @@ SITE_ID = 1
 USE_I18N = False
 USE_L10N = False
 USE_TZ = False
+
+STATIC_URL = 'static/'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
