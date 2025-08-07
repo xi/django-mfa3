@@ -27,7 +27,7 @@ dependencies = [
     "fido2>=2.0,<3.0",
     # https://github.com/lincolnloop/python-qrcode/issues/317
     "qrcode>=7.1,<7.4",
-    "django>=3.2",
+    "django>=4.2",
 ]
 
 [project.urls]
