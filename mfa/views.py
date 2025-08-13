@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView
 from django.views.generic import ListView
@@ -49,6 +50,11 @@ class MFAListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['max_keys'] = settings.MAX_KEYS_PER_ACCOUNT
+        return context
+
 
 class MFADeleteView(LoginRequiredMixin, DeleteView):
     model = MFAKey
@@ -76,6 +82,14 @@ class MFACreateView(LoginRequiredMixin, MFAFormView):
         return self.method.register_complete(self.challenge[1], code)
 
     def form_valid(self, form):
+        if settings.MAX_KEYS_PER_ACCOUNT:
+            count = self.request.user.mfakey_set.count()
+            if count >= settings.MAX_KEYS_PER_ACCOUNT:
+                form.add_error(None, format_lazy(_(
+                    'You cannot have more than {} keys. Please delete '
+                    'one of your existing keys before adding a new one.'
+                ), settings.MAX_KEYS_PER_ACCOUNT))
+                return self.form_invalid(form)
         MFAKey.objects.create(
             user=self.request.user,
             method=self.method.name,

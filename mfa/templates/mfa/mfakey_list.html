@@ -18,6 +18,13 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'mfa:create' 'TOTP' %}">Create TOTP key</a>
-<a href="{% url 'mfa:create' 'FIDO2' %}">Create FIDO2 key</a>
-<a href="{% url 'mfa:create' 'recovery' %}">Create recovery code</a>
+{% if max_keys and user.mfakey_set.count >= max_keys %}
+    <p>
+        You cannot have more than {{ max_keys }} keys.
+        Please delete one of your existing keys before adding a new one.
+    </p>
+{% else %}
+    <a href="{% url 'mfa:create' 'TOTP' %}">Create TOTP key</a>
+    <a href="{% url 'mfa:create' 'FIDO2' %}">Create FIDO2 key</a>
+    <a href="{% url 'mfa:create' 'recovery' %}">Create recovery code</a>
+{% endif %}
