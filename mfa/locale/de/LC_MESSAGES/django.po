@@ -1,5 +1,7 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-13 05:58-0500\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,6 +15,20 @@ msgstr "Validierung fehlgeschlagen"
 
 msgid "Name for this key"
 msgstr "Name für diesen Schlüssel"
+
+#, python-format
+msgid ""
+"Attempted login to %(site_name)s using a wrong two-factor authentication code"
+msgstr ""
+"Versuchte Anmeldung bei %(site_name)s mit einem falschen "
+"Zwei-Faktor-Authentifizierungscode"
+
+msgid ""
+"You cannot have more than {} keys. Please delete one of your existing keys "
+"before adding a new one."
+msgstr ""
+"Sie können nicht mehr als {} Schlüssel haben. Bitte löschen Sie einen Ihrer "
+"bestehenden Schlüssel, bevor Sie einen neuen hinzufügen."
 
 msgid "Key was created successfully!"
 msgstr "Schlüssel wurde erfolgreich erstellt!"
