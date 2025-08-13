@@ -166,6 +166,28 @@ class TOTPCreateViewTest(MFATestCase):
         })
         self.assertEqual(MFAKey.objects.count(), 1)
 
+    def test_max_keys(self):
+        for i in range(3):
+            self.user.mfakey_set.create(
+                method='recovery',
+                name=f'test-{i}',
+                secret='dummy',
+            )
+
+        self.client.force_login(self.user)
+
+        res = self.client.get('/mfa/create/TOTP/')
+        self.assertEqual(res.status_code, 200)
+        totp = pyotp.TOTP(res.context['mfa_data']['secret'])
+
+        with self.settings(MFA_MAX_KEYS_PER_ACCOUNT=3):
+            res = self.client.post('/mfa/create/TOTP/', {
+                'name': 'test',
+                'code': totp.now()
+            })
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(MFAKey.objects.count(), 3)
+
 
 class FIDO2Test(MFATestCase):
     # I have no clue how to simulate a FIDO2 authenticator,
