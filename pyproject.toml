@@ -7,7 +7,7 @@ name = "django-mfa3"
 version = "1.0.0"
 description = "multi factor authentication for django"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 keywords = ["django", "mfa", "two-factor-authentication", "webauthn", "fido2"]
 authors = [
     {name = "Tobias Bengfort", email = "tobias.bengfort@posteo.de"},
@@ -17,7 +17,6 @@ classifiers = [
     "Environment :: Web Environment",
     "Framework :: Django",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
