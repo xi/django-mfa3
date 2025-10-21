@@ -13,7 +13,7 @@ authors = [
     {name = "Tobias Bengfort", email = "tobias.bengfort@posteo.de"},
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
     "Framework :: Django",
     "Intended Audience :: Developers",
