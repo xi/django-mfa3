@@ -1,3 +1,11 @@
+1.1.0 (2025-10-21)
+------------------
+
+-   Add setting `MFA_MAX_KEYS_PER_ACCOUNT` to limit the number of keys a user
+    can have (defaults to 3). It is recommended to adapt the templates to issue
+    a warning if users exceed this limit.
+
+
 1.0.0 (2025-05-21)
 ------------------
 
