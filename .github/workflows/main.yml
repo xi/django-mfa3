@@ -21,8 +21,8 @@ jobs:
           - python: '3.14'
             django: '6.0rc1'
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@v6
+    - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python }}
     - run: pip install . coverage tomli "django==${{ matrix.django }}"
@@ -37,8 +37,8 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@v6
+    - uses: actions/setup-python@v6
     - run: pip install build
     - name: build
       run: python3 -m build
