@@ -57,5 +57,8 @@ inline-quotes = "single"
 [tool.ruff.lint.isort]
 force-single-line = true
 
+[tool.ruff.format]
+quote-style = "single"
+
 [tool.coverage.run]
 source = ["mfa"]
