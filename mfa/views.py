@@ -134,19 +134,18 @@ class MFAAuthView(MFAFormView):
 
     def complete(self, code):
         now = timezone.now()
+        window = settings.RATE_LIMIT_WINDOW
+        count = settings.RATE_LIMIT_REQUESTS
         if self.user.mfakey_set.filter(next_use_at__gt=now):
             raise ValueError
-        try:
-            return self.method.authenticate_complete(
-                self.challenge[1], self.user, code,
-            )
-        finally:
-            window = settings.RATE_LIMIT_WINDOW
-            count = settings.RATE_LIMIT_REQUESTS
-            self.user.mfakey_set.update(next_use_at=(
-                Greatest(Coalesce('next_use_at', now - window), now - window)
-                + window / count
-            ))
+        self.user.mfakey_set.update(next_use_at=(
+            Greatest(Coalesce('next_use_at', now - window), now - window)
+            + window / count
+        ))
+
+        return self.method.authenticate_complete(
+            self.challenge[1], self.user, code,
+        )
 
     def form_invalid(self, form):
         user_login_failed.send(
