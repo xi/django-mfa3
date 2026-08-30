@@ -1,3 +1,20 @@
+1.1.1 (2026-08-31)
+------------------
+
+-   security: add rate limiting
+
+    If django-mfa3 is used without django-axes for rate limiting, brute force
+    attacks on TOTP and recovery codes are relatively easy. While using
+    django-axes is recommended in the README, that recommendation is relatively
+    easy to miss. So we added our own mechanism.
+
+    Two new settings have been added: `MFA_RATE_LIMIT_WINDOW` and
+    `MFA_RATE_LIMIT_REQUESTS`. By default, the rate limiting allows 5 requests
+    in 100 seconds.
+
+    Thanks to [EQSTLab](https://github.com/EQSTLab) for the report.
+
+
 1.1.0 (2025-10-21)
 ------------------
 
