@@ -83,6 +83,19 @@ class TOTPAuthViewTest(MFATestCase):
         self.assertEqual(res.status_code, 200)
         self.assert_not_logged_in()
 
+    def test_rate_limiting(self):
+        self.login()
+
+        res = self.client.get('/mfa/auth/TOTP/')
+        self.assertEqual(res.status_code, 200)
+
+        for _ in range(6):
+            res = self.client.post('/mfa/auth/TOTP/', {'code': 'wrong'})
+
+        res = self.client.post('/mfa/auth/TOTP/', {'code': self.totp.now()})
+        self.assertEqual(res.status_code, 200)
+        self.assert_not_logged_in()
+
 
 class TOTPCreateViewTest(MFATestCase):
     def test_happy_flow(self):

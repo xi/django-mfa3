@@ -81,9 +81,8 @@ mature library when it comes to two factor authentication in django. However,
 its [basic structure is not compatible with
 FIDO2](https://github.com/django-otp/django-otp/issues/40).
 
-It is recommended to use django-mfa3 with
-[django-axes](https://github.com/jazzband/django-axes) for rate limiting. It is
-also compatible with
+django-mfa3 is compatible with
+[django-axes](https://github.com/jazzband/django-axes) and
 [django-stronghold](https://github.com/mgrouchy/django-stronghold/).
 
 ## Security considerations

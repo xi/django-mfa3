@@ -14,5 +14,12 @@ class MFAKey(models.Model):
     ])
     name = models.CharField(max_length=32)
     secret = models.TextField()
+
     # replay protection
     last_code = models.CharField(max_length=32, blank=True)
+
+    # rate limiting
+    #
+    # NOTE: this would better fit in the User model, but that is harder
+    # to modify. Instead, we save the same value on all keys of a user.
+    next_use_at = models.DateTimeField(blank=True, null=True)

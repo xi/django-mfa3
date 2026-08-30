@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 
 # The actual domain (e.g. "example.com") that this is hosted on
@@ -26,3 +28,13 @@ FIDO2_USER_VERIFICATION = getattr(settings, 'MFA_FIDO2_USER_VERIFICATION', None)
 # This setting only applies when adding new keys.
 # To allow an arbitrary number of keys, set this to `None`.
 MAX_KEYS_PER_ACCOUNT = getattr(settings, 'MFA_MAX_KEYS_PER_ACCOUNT', 3)
+
+# Prevent brute force attacks on the second factor.
+#
+# The default settings allow 5 requests per 100 seconds, which means
+# bursts of 5 requests at once or 1 request every 20 seconds over a
+# longer time.
+RATE_LIMIT_WINDOW = getattr(
+    settings, 'MFA_RATE_LIMIT_WINDOW', datetime.timedelta(seconds=100)
+)
+RATE_LIMIT_REQUESTS = getattr(settings, 'MFA_RATE_LIMIT_REQUESTS', 5)

@@ -4,10 +4,13 @@ from django.contrib.auth import login
 from django.contrib.auth import user_login_failed
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView as DjangoLoginView
+from django.db.models.functions import Coalesce
+from django.db.models.functions import Greatest
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.text import format_lazy
@@ -130,9 +133,20 @@ class MFAAuthView(MFAFormView):
         return self.method.authenticate_begin(self.user)
 
     def complete(self, code):
-        return self.method.authenticate_complete(
-            self.challenge[1], self.user, code,
-        )
+        now = timezone.now()
+        if self.user.mfakey_set.filter(next_use_at__gt=now):
+            raise ValueError
+        try:
+            return self.method.authenticate_complete(
+                self.challenge[1], self.user, code,
+            )
+        finally:
+            window = settings.RATE_LIMIT_WINDOW
+            count = settings.RATE_LIMIT_REQUESTS
+            self.user.mfakey_set.update(next_use_at=(
+                Greatest(Coalesce('next_use_at', now - window), now - window)
+                + window / count
+            ))
 
     def form_invalid(self, form):
         user_login_failed.send(
