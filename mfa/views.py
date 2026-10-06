@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth import user_login_failed
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView as DjangoLoginView
+from django.db import transaction
 from django.db.models.functions import Coalesce
 from django.db.models.functions import Greatest
 from django.http import Http404
@@ -136,12 +137,14 @@ class MFAAuthView(MFAFormView):
         now = timezone.now()
         window = settings.RATE_LIMIT_WINDOW
         count = settings.RATE_LIMIT_REQUESTS
-        if self.user.mfakey_set.filter(next_use_at__gt=now):
-            raise ValueError
-        self.user.mfakey_set.update(next_use_at=(
-            Greatest(Coalesce('next_use_at', now - window), now - window)
-            + window / count
-        ))
+        with transaction.atomic():
+            keys = self.user.mfakey_set.select_for_update()
+            if keys.filter(next_use_at__gt=now).exists():
+                raise ValueError
+            keys.update(next_use_at=(
+                Greatest(Coalesce('next_use_at', now - window), now - window)
+                + window / count
+            ))
 
         return self.method.authenticate_complete(
             self.challenge[1], self.user, code,
