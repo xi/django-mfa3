@@ -96,6 +96,18 @@ class TOTPAuthViewTest(MFATestCase):
         self.assertEqual(res.status_code, 200)
         self.assert_not_logged_in()
 
+    def test_already_logged_in(self):
+        other = User.objects.create_user('other', password='password')
+        MFAKey.objects.create(
+            user=other,
+            method='TOTP',
+            name='test',
+            secret=pyotp.random_base32(),
+        )
+        self.client.force_login(other)
+
+        self.test_happy_flow()
+
 
 class TOTPCreateViewTest(MFATestCase):
     def test_happy_flow(self):

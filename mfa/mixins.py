@@ -60,5 +60,5 @@ class MFAFormView(FormView):
         ))
 
     def form_valid(self, form):
-        del self.request.session['mfa_challenge']
+        self.request.session.pop('mfa_challenge', None)
         return super().form_valid(form)

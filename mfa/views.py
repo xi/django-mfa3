@@ -160,6 +160,9 @@ class MFAAuthView(MFAFormView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
+        # login() can wipe the session, so we have to restore the relevant data
+        success_url = self.request.session['mfa_success_url']
         login(self.request, self.user)
-        del self.request.session['mfa_user']
+        self.request.session['mfa_success_url'] = success_url
+        self.request.session.pop('mfa_user', None)
         return super().form_valid(form)
