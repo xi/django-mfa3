@@ -1,3 +1,10 @@
+1.1.2 (2026-10-13)
+------------------
+
+-   fix race condition in rate limiting
+-   fix error when logging in while already logged in with another account
+
+
 1.1.1 (2026-08-31)
 ------------------
 
