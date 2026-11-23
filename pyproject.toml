@@ -24,8 +24,7 @@ classifiers = [
 dependencies = [
     "pyotp",
     "fido2>=2.0,<3.0",
-    # https://github.com/lincolnloop/python-qrcode/issues/317
-    "qrcode>=7.1,<7.4",
+    "qrcode>=7.1,<9",
     "django>=4.2",
 ]
 
